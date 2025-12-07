@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.4
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: szrotomoto
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+      TZ: "Europe/Warsaw"
+    volumes:
+      - db_data:/var/lib/mysql
+    command: mysqld
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uappuser -papppass --execute 'SHOW DATABASES;'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    ports:
+      - "3307:3307"
+    networks:
+      - public
+  backend:
+    image: php:8.4-apache
+    platform: linux/amd64
+    environment:
+      LANG: pl_PL.UTF-8
+      LANGUAGE: pl_PL.UTF-8
+      LC_ALL: pl_PL.UTF-8
+      TZ: "Europe/Warsaw"
+    volumes:
+      - ./backend:/var/www/html
+    command: docker-php-entrypoint apache2-foreground
+    ports:
+      - "3000:80"
+    networks:
+      - public
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+
+networks:
+  public:
