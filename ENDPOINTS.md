@@ -1,13 +1,19 @@
 # Status
 ### Base healthcheck
 Base healthckeck endpoint to verify if the backend is running.
-Request:
-**URL:** `/`
-**Method:** `GET`
-**Auth required:** No
-Response:
-**Code:** 200
-**Content:**
+
+**Request:**
+URL:
+```
+/
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+Code: 200
+Content:
 ```json
 {
   "status": "ok"
@@ -16,13 +22,20 @@ Response:
 
 ### Server status
 Server status endpoint to verify backend and database connectivity.
-Request:
-**URL:** `/status.php`
-**Method:** `GET`
-**Auth required:** No
-Response:
-**Code:** 200
-**Content:**
+
+**Request:**
+
+URL:
+```
+/status.php
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+Code: 200
+Content:
 ```json
 {
     "status" => "ok",
