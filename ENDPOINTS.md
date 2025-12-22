@@ -38,8 +38,8 @@ Code: 200
 Content:
 ```json
 {
-    "status" => "ok",
-    "current_time" => $currentTimeFromServer->format('Y-m-d H:i:s'),
-    "current_time_from_db" => $currentTimeFromDb
+    "status": "ok",
+    "current_time": $currentTimeFromServer->format('Y-m-d H:i:s'),
+    "current_time_from_db": $currentTimeFromDb
 }
 ```
