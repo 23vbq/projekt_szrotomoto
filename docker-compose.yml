@@ -20,11 +20,13 @@ services:
       retries: 3
       start_period: 10s
     ports:
-      - "3307:3307"
+      - "3307:3306"
     networks:
-      - public
+      - private
   backend:
-    image: php:8.4-apache
+    build: 
+      context: ./
+      dockerfile: ./Dockerfile.backend
     platform: linux/amd64
     environment:
       LANG: pl_PL.UTF-8
@@ -37,6 +39,7 @@ services:
     ports:
       - "3000:80"
     networks:
+      - private
       - public
     depends_on:
       - db
@@ -46,3 +49,4 @@ volumes:
 
 networks:
   public:
+  private:

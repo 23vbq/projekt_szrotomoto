@@ -2,7 +2,7 @@
 
 class Database{
     private const HOST = 'db';
-    private const PORT = 3307;
+    private const PORT = 3306;
     private const NAME = 'szrotomoto';
     private const USER = 'appuser';
     private const PASSWORD = 'apppass';
