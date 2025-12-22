@@ -1,7 +1,8 @@
 <?php
-require_once 'utils_loader.php';
+require_once 'base.php';
 
 $db = new Database();
 $stmt = $db->getPdo()->prepare("SELECT NOW()");
 $stmt->execute();
-var_dump($stmt->fetch());
+
+echo json_encode($stmt->fetch());
