@@ -18,6 +18,19 @@ class Session{
         }
     }
 
+    public static function login(int $userId){
+        self::start();
+
+        $_SESSION['is_authenticated'] = true;
+        $_SESSION['user_id'] = $userId;
+    }
+
+    public static function logout(){
+        self::start();
+
+        session_destroy();
+    }
+
     private static function start(){
         if(session_status() === PHP_SESSION_NONE){
             session_start();
