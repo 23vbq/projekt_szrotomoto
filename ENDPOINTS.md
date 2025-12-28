@@ -27,7 +27,7 @@ Server status endpoint to verify backend and database connectivity.
 
 URL:
 ```
-/status.php
+/api/status.php
 ```
 | Method | Auth required |
 | --- | --- |
@@ -41,5 +41,76 @@ Content:
     "status": "ok",
     "current_time": $currentTimeFromServer->format('Y-m-d H:i:s'),
     "current_time_from_db": $currentTimeFromDb
+}
+```
+
+# Login
+### Register
+Register a new user.
+
+**Request:**
+URL:
+```
+/api/login/register.php
+```
+| Method | Auth required |
+| --- | --- |
+| POST | No |
+
+**Request Body:**
+```json
+{
+    "email": "user@example.com",
+    "password": "securepassword",
+    "confirm_password": "securepassword"
+}
+```
+
+**Response:**
+Code: 201 (User created successfully) || (400 Bad Request - Invalid input) || (409 User already exists)
+Content: message indicating success or error details.
+
+### Login
+Login an existing user.
+
+**Request:**
+URL:
+```
+/api/login/login.php
+```
+| Method | Auth required |
+| --- | --- |
+| POST | No |
+
+**Request Body:**
+```json
+{
+    "email": "user@example.com",
+    "password": "securepassword"
+}
+```
+
+**Response:**
+Code: 200 (Login successful) || (400 Bad Request - Invalid input) || (401 Unauthorized - Invalid credentials)
+Content: message indicating success or error details.
+
+### Logout
+Logout the currently authenticated user.
+
+**Request:**
+URL:
+```
+/api/login/logout.php
+```
+| Method | Auth required |
+| --- | --- |
+| * | Yes |
+
+**Response:**
+Code: 200
+Content:
+```json
+{
+    "message": "Logout successful"
 }
 ```
