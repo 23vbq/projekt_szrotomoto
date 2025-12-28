@@ -1,5 +1,5 @@
 <?php
-require_once 'utils_loader.php';
+require_once __DIR__.'/../utils_loader.php';
 
 $db = new Database();
 
