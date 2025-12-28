@@ -27,7 +27,7 @@ Server status endpoint to verify backend and database connectivity.
 
 URL:
 ```
-/status.php
+/api/status.php
 ```
 | Method | Auth required |
 | --- | --- |
