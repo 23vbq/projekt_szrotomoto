@@ -19,6 +19,10 @@ cd projekt_szrotomoto
 ```
 docker-compose up -d --build
 ```
+8. Po uruchomieniu należy wykonać migracje bazy danych:
+```
+docker exec -it <id_kontenera> php bin/migrate.php
+```
 
 ## Uruchomienie na windows
 1. Uruchom Docker Desktop
@@ -34,4 +38,3 @@ Dostępna jest również kolekcja postmana w pliku [projekt_szrotomoto.postman_c
 ## Migracje bazy danych
 Migracje bazy danych znajdują się w folderze `backend/migrations`.
 Aby zastosować migracje, należy uruchomić skrypt `php bin/migrate.php` z poziomu środowiska projektu.
-Migracje będą automatycznie uruchamiane przy starcie kontenera backendu.
