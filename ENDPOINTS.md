@@ -93,3 +93,23 @@ URL:
 **Response:**
 Code: 200 (Login successful) || (400 Bad Request - Invalid input) || (401 Unauthorized - Invalid credentials)
 Content: message indicating success or error details.
+
+### Logout
+Logout the currently authenticated user.
+
+**Request:**
+URL:
+```
+/api/login/logout.php
+```
+| Method | Auth required |
+| --- | --- |
+| * | Yes |
+
+**Response:**
+Code: 200
+Content:
+```json
+{  "message": "Logout successful"
+}
+```
