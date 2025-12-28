@@ -19,6 +19,10 @@ cd projekt_szrotomoto
 ```
 docker-compose up -d --build
 ```
+8. Po uruchomieniu należy wykonać migracje bazy danych:
+```
+docker exec -it <id_kontenera> php bin/migrate.php
+```
 
 ## Uruchomienie na windows
 1. Uruchom Docker Desktop
@@ -28,4 +32,9 @@ docker-compose up -d
 ```
 
 ## Dokumentacja API
-Dokumentacja API znajduje się w pliku [ENDPOINTS.md](ENDPOINTS.md)
+Dokumentacja API znajduje się w pliku [ENDPOINTS.md](ENDPOINTS.md) (w wersji angielskiej).
+Dostępna jest również kolekcja postmana w pliku [projekt_szrotomoto.postman_collection.json](projekt_szrotomoto.postman_collection.json).
+
+## Migracje bazy danych
+Migracje bazy danych znajdują się w folderze `backend/migrations`.
+Aby zastosować migracje, należy uruchomić skrypt `php bin/migrate.php` z poziomu środowiska projektu.
