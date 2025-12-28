@@ -110,6 +110,7 @@ URL:
 Code: 200
 Content:
 ```json
-{  "message": "Logout successful"
+{
+    "message": "Logout successful"
 }
 ```
