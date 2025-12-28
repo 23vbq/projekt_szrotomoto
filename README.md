@@ -26,3 +26,6 @@ docker-compose up -d --build
 ```
 docker-compose up -d
 ```
+
+## Dokumentacja API
+Dokumentacja API znajduje się w pliku [ENDPOINTS.md](ENDPOINTS.md)
