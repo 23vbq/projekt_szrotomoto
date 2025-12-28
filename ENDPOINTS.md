@@ -69,3 +69,27 @@ URL:
 **Response:**
 Code: 201 (User created successfully) || (400 Bad Request - Invalid input) || (409 User already exists)
 Content: message indicating success or error details.
+
+### Login
+Login an existing user.
+
+**Request:**
+URL:
+```
+/api/login/login.php
+```
+| Method | Auth required |
+| --- | --- |
+| POST | No |
+
+**Request Body:**
+```json
+{
+    "email": "user@example.com",
+    "password": "securepassword"
+}
+```
+
+**Response:**
+Code: 200 (Login successful) || (400 Bad Request - Invalid input) || (401 Unauthorized - Invalid credentials)
+Content: message indicating success or error details.
