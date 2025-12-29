@@ -109,6 +109,30 @@
 			]
 		},
 		{
+			"name": "Vechicles",
+			"item": [
+				{
+					"name": "Brands",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/vechicles/brands.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"vechicles",
+								"brands.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Status",
 			"request": {
 				"method": "GET",
