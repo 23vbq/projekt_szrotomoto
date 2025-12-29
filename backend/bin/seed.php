@@ -4,6 +4,12 @@ require_once __DIR__ . '/../utils_loader.php';
 $db = new Database();
 $pdo = $db->getPdo();
 
+$pdo->beginTransaction();
+
+print "Clearing existing data...".PHP_EOL;
+$pdo->exec('DELETE FROM models');
+$pdo->exec('DELETE FROM brands');
+
 print "Seeding database...".PHP_EOL;
 $startTime = microtime(true);
 
@@ -39,6 +45,8 @@ foreach ($vechicles as $brand => $models) {
 }
 $insertStmt = $pdo->prepare(rtrim($sql, ','));
 $insertStmt->execute($params);
+
+$pdo->commit();
 
 $endTime = microtime(true);
 $duration = $endTime - $startTime;
