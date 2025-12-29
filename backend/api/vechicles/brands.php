@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $db = new Database();
-$brandsStmt = $db->getPdo()->prepare('SELECT id, name FROM brands_asd ORDER BY name ASC');
+$brandsStmt = $db->getPdo()->prepare('SELECT id, name FROM brands ORDER BY name ASC');
 $brandsStmt->execute();
 $brands = $brandsStmt->fetchAll(PDO::FETCH_ASSOC);
 
