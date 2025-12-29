@@ -11,6 +11,11 @@ spl_autoload_register(function ($class) {
  * Exception handler setup based on runtime environment, with default fallback to 'development'.
  */
 function prepareExceptionHandler(string $runtime): void {
+    $isConsole = php_sapi_name() === 'cli';
+    if ($isConsole) {
+        return;
+    }
+    
     set_exception_handler(function ($exception) use ($runtime) {
         error_log($exception->getMessage());
 
