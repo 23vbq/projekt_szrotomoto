@@ -4,7 +4,7 @@ class Session{
         self::start();
 
         if(!isset($_SESSION['is_authenticated']) || $_SESSION['is_authenticated'] !== true){
-            Response::json(['error' => 'Authentication required'], Response::HTTP_UNAUTHORIZED);
+            Response::error('Authentication required', Response::HTTP_UNAUTHORIZED);
             exit;
         }
     }
@@ -13,16 +13,17 @@ class Session{
         self::start();
 
         if(isset($_SESSION['is_authenticated']) && $_SESSION['is_authenticated'] === true){
-            Response::json(['error' => 'Already authenticated'], Response::HTTP_BAD_REQUEST);
+            Response::error('Already authenticated', Response::HTTP_BAD_REQUEST);
             exit;
         }
     }
 
-    public static function login(int $userId){
+    public static function login(int $userId, string $userName){
         self::start();
 
         $_SESSION['is_authenticated'] = true;
         $_SESSION['user_id'] = $userId;
+        $_SESSION['user_name'] = $userName;
     }
 
     public static function logout(){

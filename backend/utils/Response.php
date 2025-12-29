@@ -72,6 +72,6 @@ class Response {
     }
 
     public static function error(string $message, int $statusCode = self::HTTP_BAD_REQUEST): void {
-        self::json(['error' => $message], $statusCode);
+        self::json(['message' => $message], $statusCode);
     }
 }
