@@ -33,8 +33,12 @@ docker-compose up -d
 
 ## Dokumentacja API
 Dokumentacja API znajduje się w pliku [ENDPOINTS.md](ENDPOINTS.md) (w wersji angielskiej).
+
 Dostępna jest również kolekcja postmana w pliku [projekt_szrotomoto.postman_collection.json](projekt_szrotomoto.postman_collection.json).
 
 ## Migracje bazy danych
 Migracje bazy danych znajdują się w folderze `backend/migrations`.
+
 Aby zastosować migracje, należy uruchomić skrypt `php bin/migrate.php` z poziomu środowiska projektu.
+
+Dostępny jest również seeder do wstępnego załadowania danych aplikacji: `php bin/seed.php`.

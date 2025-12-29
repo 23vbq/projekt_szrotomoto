@@ -135,3 +135,36 @@ Content:
     "message": "Logout successful"
 }
 ```
+
+# Vehicles
+### Brands
+Get a list of all vehicle brands. Ordered alphabetically by name.
+
+**Request:**
+
+URL:
+```
+/api/vehicles/brands.php
+```
+| Method | Auth required |
+| --- | --- |
+| GET | Yes |
+
+**Response:**
+
+Code: 200
+Content:
+
+```json
+[
+    {
+        "id": 2,
+        "name": "Audi"
+    },
+    {
+        "id": 1,
+        "name": "BMW"
+    },
+    ...
+]
+```
