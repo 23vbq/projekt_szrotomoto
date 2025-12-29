@@ -3,6 +3,7 @@
 Base healthckeck endpoint to verify if the backend is running.
 
 **Request:**
+
 URL:
 ```
 /
@@ -12,7 +13,9 @@ URL:
 | GET | No |
 
 **Response:**
+
 Code: 200
+
 Content:
 ```json
 {
@@ -34,7 +37,9 @@ URL:
 | GET | No |
 
 **Response:**
+
 Code: 200
+
 Content:
 ```json
 {
@@ -49,6 +54,7 @@ Content:
 Register a new user.
 
 **Request:**
+
 URL:
 ```
 /api/login/register.php
@@ -62,18 +68,22 @@ URL:
 {
     "email": "user@example.com",
     "password": "securepassword",
-    "confirm_password": "securepassword"
+    "repeated_password": "securepassword",
+    "name": "Handlarz Mirek"
 }
 ```
 
 **Response:**
+
 Code: 201 (User created successfully) || (400 Bad Request - Invalid input) || (409 User already exists)
+
 Content: message indicating success or error details.
 
 ### Login
 Login an existing user.
 
 **Request:**
+
 URL:
 ```
 /api/login/login.php
@@ -91,13 +101,22 @@ URL:
 ```
 
 **Response:**
+
 Code: 200 (Login successful) || (400 Bad Request - Invalid input) || (401 Unauthorized - Invalid credentials)
+
 Content: message indicating success or error details.
+```json
+{
+    "message": "Login successful",
+    "user_name": "Handlarz Mirek"
+}
+```
 
 ### Logout
 Logout the currently authenticated user.
 
 **Request:**
+
 URL:
 ```
 /api/login/logout.php
@@ -107,7 +126,9 @@ URL:
 | * | Yes |
 
 **Response:**
+
 Code: 200
+
 Content:
 ```json
 {
