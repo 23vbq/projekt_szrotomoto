@@ -8,14 +8,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 $brandId = isset($_GET['brand_id']) ? $_GET['brand_id'] : null;
 
-$modelsStmt = Database::getPdo()->prepare('SELECT
-    id, name, brand_id
-FROM models
-WHERE brand_id = :brand_id
-ORDER BY name ASC');
-$modelsStmt->execute([
-    'brand_id' => $brandId
-]);
-$models = $modelsStmt->fetchAll(PDO::FETCH_ASSOC); 
+$qb = (new QueryBuilder(Database::getPdo()))
+    ->select('id, name, brand_id')
+    ->from('models')
+    ->addOrderBy('name', 'ASC');
+
+if ($brandId !== null) {
+    $qb->where('brand_id = :brand_id')
+       ->setParameter(':brand_id', $brandId);
+}
+
+$models = $qb->execute()->fetchAll(PDO::FETCH_ASSOC);
 
 Response::json($models);
