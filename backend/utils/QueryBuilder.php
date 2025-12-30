@@ -92,6 +92,9 @@ class QueryBuilder {
         return $this;
     }
 
+    /**
+     * @throws PDOException
+     */
     public function execute(): PDOStatement
     {
         $query = $this->buildQuery();
