@@ -148,7 +148,7 @@ URL:
 ```
 | Method | Auth required |
 | --- | --- |
-| GET | Yes |
+| GET | No |
 
 **Response:**
 
