@@ -28,9 +28,7 @@ if ($password !== $repeatedPassword) {
     exit;
 }
 
-$db = new Database();
-
-$emailCheckStmt = $db->getPdo()->prepare('SELECT COUNT(*) FROM users WHERE email = :email');
+$emailCheckStmt = Database::getPdo()->prepare('SELECT COUNT(*) FROM users WHERE email = :email');
 $emailCheckStmt->execute(['email' => $email]);
 if ($emailCheckStmt->fetchColumn() > 0) {
     Response::error('Email is already registered', Response::HTTP_CONFLICT);
@@ -39,7 +37,7 @@ if ($emailCheckStmt->fetchColumn() > 0) {
 
 $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
-$insertStmt = $db->getPdo()->prepare('INSERT INTO users (email, password_hash, name) VALUES (:email, :password_hash, :name)');
+$insertStmt = Database::getPdo()->prepare('INSERT INTO users (email, password_hash, name) VALUES (:email, :password_hash, :name)');
 $success = $insertStmt->execute(['email' => $email, 'password_hash' => $passwordHash, 'name' => $name]);
 
 if (!$success) {

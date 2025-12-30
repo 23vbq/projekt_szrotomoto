@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../utils_loader.php';
 
-$db = new Database();
-$pdo = $db->getPdo();
+$pdo = Database::getPdo();
 
 $pdo->beginTransaction();
 

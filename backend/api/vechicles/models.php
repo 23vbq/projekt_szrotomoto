@@ -8,8 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 $brandId = isset($_GET['brand_id']) ? $_GET['brand_id'] : null;
 
-$db = new Database();
-$modelsStmt = $db->getPdo()->prepare('SELECT
+$modelsStmt = Database::getPdo()->prepare('SELECT
     id, name, brand_id
 FROM models
 WHERE brand_id = :brand_id

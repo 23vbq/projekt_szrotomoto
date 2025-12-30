@@ -3,8 +3,7 @@ require_once __DIR__ . '/../utils_loader.php';
 
 $currentTimeFromServer = new \DateTime();
 
-$db = new Database();
-$stmt = $db->getPdo()->prepare("SELECT NOW()");
+$stmt = Database::getPdo()->prepare("SELECT NOW()");
 $stmt->execute();
 
 $currentTimeFromDb = $stmt->fetchColumn();
