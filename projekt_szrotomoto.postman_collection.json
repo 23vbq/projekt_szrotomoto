@@ -109,7 +109,7 @@
 			]
 		},
 		{
-			"name": "Vechicles",
+			"name": "Vehicles",
 			"item": [
 				{
 					"name": "Brands",
@@ -117,13 +117,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ADDR}}/api/vechicles/brands.php",
+							"raw": "{{ADDR}}/api/vehicles/brands.php",
 							"host": [
 								"{{ADDR}}"
 							],
 							"path": [
 								"api",
-								"vechicles",
+								"vehicles",
 								"brands.php"
 							]
 						}
@@ -136,13 +136,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ADDR}}/api/vechicles/models.php?brand_id",
+							"raw": "{{ADDR}}/api/vehicles/models.php?brand_id",
 							"host": [
 								"{{ADDR}}"
 							],
 							"path": [
 								"api",
-								"vechicles",
+								"vehicles",
 								"models.php"
 							],
 							"query": [
