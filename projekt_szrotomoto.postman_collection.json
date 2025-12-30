@@ -129,6 +129,31 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Models",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/vechicles/models.php?brand_id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"vechicles",
+								"models.php"
+							],
+							"query": [
+								{
+									"key": "brand_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
