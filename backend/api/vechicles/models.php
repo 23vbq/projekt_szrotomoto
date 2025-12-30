@@ -13,7 +13,7 @@ $qb = (new QueryBuilder(Database::getPdo()))
     ->from('models')
     ->addOrderBy('name', 'ASC');
 
-if ($brandId !== null) {
+if (!empty($brandId)) {
     $qb->where('brand_id = :brand_id')
        ->setParameter(':brand_id', $brandId);
 }
