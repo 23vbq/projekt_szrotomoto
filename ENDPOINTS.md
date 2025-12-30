@@ -191,11 +191,13 @@ Content:
 [
     {
         "id": 5,
-        "name": "A4"
+        "name": "A4",
+        "brand_id": 1
     },
     {
         "id": 2,
-        "name": "Seria 1"
+        "name": "Seria 1",
+        "brand_id": 1
     },
     ...
 ]
