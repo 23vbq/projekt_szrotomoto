@@ -12,7 +12,7 @@ class Database{
     private static function initConfig()
     {
         self::$DB_HOST = Env::get('DB_HOST');
-        self::$DB_PORT = Env::get('DB_PORT');
+        self::$DB_PORT = (int) Env::get('DB_PORT');
         self::$DB_NAME = Env::get('DB_NAME');
         self::$DB_USER = Env::get('DB_USER');
         self::$DB_PASSWORD = Env::get('DB_PASSWORD');
