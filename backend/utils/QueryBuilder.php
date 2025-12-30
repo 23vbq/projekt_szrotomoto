@@ -96,6 +96,14 @@ class QueryBuilder {
     {
         $query = $this->buildQuery();
         $stmt = $this->pdo->prepare($query);
+
+        if ($this->limit !== null) {
+            $stmt->bindValue(':qb_build_limit', $this->limit, PDO::PARAM_INT);
+        }
+        if ($this->offset !== null) {
+            $stmt->bindValue(':qb_build_offset', $this->offset, PDO::PARAM_INT);
+        }
+
         foreach ($this->params as $key => $value) {
             $stmt->bindValue($key, $value);
         }
@@ -129,11 +137,11 @@ class QueryBuilder {
         }
 
         if ($this->limit !== null) {
-            $query .= ' LIMIT ' . $this->limit;
+            $query .= ' LIMIT :qb_build_limit';
         }
 
         if ($this->offset !== null) {
-            $query .= ' OFFSET ' . $this->offset;
+            $query .= ' OFFSET :qb_build_offset';
         }
 
         return $query;
