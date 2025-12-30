@@ -192,7 +192,7 @@ Content:
     {
         "id": 5,
         "name": "A4",
-        "brand_id": 1
+        "brand_id": 2
     },
     {
         "id": 2,
