@@ -8,6 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 $brandId = isset($_GET['brand_id']) ? $_GET['brand_id'] : null;
 
+if ($brandId !== null && !is_numeric($brandId)) {
+    Response::error('Invalid brand_id parameter', Response::HTTP_BAD_REQUEST);
+    exit;
+}
+
 $qb = (new QueryBuilder(Database::getPdo()))
     ->select('id, name, brand_id')
     ->from('models')
