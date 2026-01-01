@@ -97,4 +97,11 @@ class Consts{
             'Peru',
         ];
     }
+
+    /**
+     * Offer Statuses
+     */
+    public const OFFER_STATUS_ACTIVE = 'active';
+    public const OFFER_STATUS_SOLD = 'sold';
+    public const OFFER_STATUS_REMOVED = 'removed';
 }
