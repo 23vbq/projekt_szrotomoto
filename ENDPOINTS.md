@@ -202,3 +202,115 @@ Content:
     ...
 ]
 ```
+
+# Application Values
+### Fuel Types
+Get a list of all fuel types.
+
+**Request:**
+
+URL:
+```
+/api/values/fuelType.php
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+
+Code: 200
+
+Content:
+```json
+[
+    "Petrol",
+    "Diesel",
+    "Electric",
+    "Hybrid",
+    ...
+]
+```
+
+### Transmission Types
+Get a list of all transmission types.
+
+**Request:**
+
+URL:
+```
+/api/values/transmissionType.php
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+
+Code: 200
+
+Content:
+```json
+[
+    "Manual",
+    "Automatic",
+    "Semi-automatic",
+    ...
+]
+```
+
+### Body Types
+Get a list of all vehicle body types.
+
+**Request:**
+
+URL:
+```
+/api/values/bodyType.php
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+
+Code: 200
+
+Content:
+```json
+[
+    "Sedan",
+    "Hatchback",
+    "SUV",
+    "Coupe",
+    ...
+]
+```
+
+### Countries
+Get a list of all countries sorted alphabetically.
+
+**Request:**
+
+URL:
+```
+/api/values/countries.php
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+
+Code: 200
+
+Content:
+```json
+[
+    "Austria",
+    "Belgium",
+    "Croatia",
+    "Denmark",
+    ...
+]
+```
