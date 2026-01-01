@@ -168,3 +168,37 @@ Content:
     ...
 ]
 ```
+
+### Models
+Get a filtered list of vehicle models for a given brand. Ordered alphabetically by name.
+
+**Request:**
+
+URL:
+```
+/api/vehicles/models.php?brand_id={brand_id}
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+
+Code: 200
+
+Content:
+```json
+[
+    {
+        "id": 5,
+        "name": "A4",
+        "brand_id": 2
+    },
+    {
+        "id": 2,
+        "name": "Seria 1",
+        "brand_id": 1
+    },
+    ...
+]
+```

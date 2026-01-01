@@ -6,8 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-$db = new Database();
-$brandsStmt = $db->getPdo()->prepare('SELECT id, name FROM brands ORDER BY name ASC');
+$brandsStmt = Database::getPdo()->prepare('SELECT id, name FROM brands ORDER BY name ASC');
 $brandsStmt->execute();
 $brands = $brandsStmt->fetchAll(PDO::FETCH_ASSOC);
 

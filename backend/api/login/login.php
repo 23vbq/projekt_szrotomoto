@@ -21,9 +21,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-$db = new Database();
-
-$loginStmt = $db->getPdo()->prepare('SELECT id, name, password_hash FROM users WHERE email = :email');
+$loginStmt = Database::getPdo()->prepare('SELECT id, name, password_hash FROM users WHERE email = :email');
 $loginStmt->execute(['email' => $email]);
 $user = $loginStmt->fetch(PDO::FETCH_ASSOC);
 

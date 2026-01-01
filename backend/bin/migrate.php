@@ -1,10 +1,8 @@
 <?php
 require_once __DIR__.'/../utils_loader.php';
 
-$db = new Database();
-
 // Prepare migrations table
-$migrationsTableCreated = $db->getPdo()->prepare('
+$migrationsTableCreated = Database::getPdo()->prepare('
 CREATE TABLE IF NOT EXISTS `migrations` (
     `migration` VARCHAR(255) NOT NULL,
     `applied_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -16,7 +14,7 @@ if (!$migrationsTableCreated) {
     die('Failed to create migrations table.');
 }
 
-$appliedMigrations = $db->getPdo()->query('SELECT `migration` FROM `migrations`')->fetchAll(PDO::FETCH_COLUMN);
+$appliedMigrations = Database::getPdo()->query('SELECT `migration` FROM `migrations`')->fetchAll(PDO::FETCH_COLUMN);
 
 $availableMigrations = array_diff(scandir(__DIR__ . '/../migrations'), ['.', '..', '.htaccess']);
 $availableMigrations = array_map(fn ($file) => pathinfo($file, PATHINFO_FILENAME), $availableMigrations);
@@ -36,16 +34,16 @@ foreach ($notAppliedMigrations as $migration) {
         die("Migration file is empty: $migration.sql");
     }
 
-    $result = $db->getPdo()->exec($migrationContent);
+    $result = Database::getPdo()->exec($migrationContent);
     if ($result === false) {
-        $errorInfo = $db->getPdo()->errorInfo();
+        $errorInfo = Database::getPdo()->errorInfo();
         die("Failed to apply migration: $migration. Error: " . $errorInfo[2]);
     }
 
     $endTime = microtime(true);
     $runtime = ($endTime - $startTime); // in seconds
 
-    $stmt = $db->getPdo()->prepare('INSERT INTO `migrations` (`migration`, `runtime`) VALUES (:migration, :runtime)');
+    $stmt = Database::getPdo()->prepare('INSERT INTO `migrations` (`migration`, `runtime`) VALUES (:migration, :runtime)');
     $stmt->execute(['migration' => $migration, 'runtime' => $runtime]);
 
     print "Applied migration: $migration in {$runtime}s".PHP_EOL;
