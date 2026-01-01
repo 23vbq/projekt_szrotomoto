@@ -158,6 +158,87 @@
 			]
 		},
 		{
+			"name": "Values",
+			"item": [
+				{
+					"name": "Fuel Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/fuelType.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"fuelType.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transmission Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/transmissionType.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"transmissionType.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Body Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/bodyType.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"bodyType.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Countries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/countries.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"countries.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Status",
 			"request": {
 				"method": "GET",
