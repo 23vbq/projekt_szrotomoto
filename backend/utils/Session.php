@@ -29,6 +29,7 @@ class Session{
     public static function logout(){
         self::start();
 
+        session_unset();
         session_destroy();
     }
 
