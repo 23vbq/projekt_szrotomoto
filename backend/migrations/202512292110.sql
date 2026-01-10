@@ -1,4 +1,4 @@
--- Create vechicle brands and models tables
+-- Create vehicle brands and models tables
 CREATE TABLE brands (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
