@@ -1,6 +1,6 @@
 # Status
 ### Base healthcheck
-Base healthckeck endpoint to verify if the backend is running.
+Base healthcheck endpoint to verify if the backend is running.
 
 **Request:**
 
