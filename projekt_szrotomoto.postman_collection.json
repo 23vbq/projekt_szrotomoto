@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "6828eee9-9eac-4312-ad8d-bc84edbe64b5",
+		"name": "projekt_szrotomoto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29255098"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "repeated_password",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/login/register.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"login",
+								"register.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/login/login.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"login",
+								"login.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/login/logout.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"login",
+								"logout.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "Brands",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/vehicles/brands.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"brands.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Models",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/vehicles/models.php?brand_id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"models.php"
+							],
+							"query": [
+								{
+									"key": "brand_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ADDR}}/api/status.php",
+					"host": [
+						"{{ADDR}}"
+					],
+					"path": [
+						"api",
+						"status.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ADDR",
+			"value": "localhost:3000",
+			"type": "string"
+		}
+	]
+}
