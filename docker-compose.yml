@@ -36,6 +36,7 @@ services:
     volumes:
       - ./backend:/var/www/html
       - .env:/var/www/html/.env:ro
+      - ./szrotomoto_data:/mnt/szrotomoto_data
     command: docker-php-entrypoint apache2-foreground
     ports:
       - "3000:80"

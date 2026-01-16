@@ -429,6 +429,12 @@ URL:
 | POST | Yes |
 
 **Request Body:**
+Form data (multipart/form-data) containing:
+- Text fields: `model_id`, `title`, `description`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `color`, `displacement`, `horsepower`, `torque`, `body_type`, `doors_amount`, `seats_amount`, `vin`, `registration_number`, `country_of_origin`, `is_accident_free`, `is_first_hand`, `is_used`, `has_warranty`, `has_service_book`
+- Optional: `attachment_ids[]` - array of pre-uploaded attachment IDs
+- Optional: `files[]` - files to upload directly with the offer
+
+Example JSON representation:
 ```json
 {
     "model_id": 1,
@@ -453,9 +459,14 @@ URL:
     "is_first_hand": "0",
     "is_used": "1",
     "has_warranty": "0",
-    "has_service_book": "1"
+    "has_service_book": "1",
+    "attachment_ids": [1, 2, 3]
 }
 ```
+
+Note: Files can be uploaded in two ways:
+1. Pre-upload files using `/api/attachments/create.php` and pass `attachment_ids`
+2. Pass files directly in the `files[]` field (they will be uploaded automatically)
 
 Required fields: `model_id`, `title`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `body_type`
 
@@ -587,6 +598,8 @@ All fields are optional, only the fields you want to update:
     "has_service_book": "1"
 }
 ```
+
+Note: When editing via multipart/form-data, you can also include `files[]` to upload new attachments. They will be added to the existing attachments.
 
 Validation:
 - `fuel_type` (if provided) must be one of the valid fuel types from `/api/values/fuelType.php`
@@ -750,3 +763,90 @@ Content: Returns the updated offer object.
     "user_name": "Handlarz Mirek"
 }
 ```
+
+# Attachments
+### Upload
+Upload an image attachment. Requires authentication. File is stored with unique name in `/mnt/szrotomoto_data`. Returns attachment ID that can be associated with offers.
+
+**Request:**
+
+URL:
+```
+/api/attachments/create.php
+```
+| Method | Auth required |
+| --- | --- |
+| POST | Yes |
+
+**Request Body:**
+Multipart form data (multipart/form-data) containing:
+- Text fields: `file` field containing an image file
+- Max file size: 10MB
+- Allowed MIME types: image/jpeg, image/png, image/gif, image/webp
+
+**Response:**
+
+Code: 201 (File uploaded successfully) || (400 Bad Request - No file provided) || (401 Unauthorized) || (500 Internal Server Error)
+
+Content:
+```json
+{
+    "attachment_id": 1,
+    "message": "File uploaded successfully"
+}
+```
+
+**Error Responses:**
+- No file provided:
+```json
+{
+    "message": "No file provided"
+}
+```
+- Upload failure:
+```json
+{
+    "message": "Failed to upload file"
+}
+```
+
+### Show/Download
+Download an attachment by ID.
+
+**Request:**
+
+URL:
+```
+/api/attachments/show.php?id={attachment_id}
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+
+Code: 200 (File found and returned) || (400 Bad Request - Invalid attachment ID) || (404 Not Found - Attachment not found)
+
+Content: File contents as binary data with appropriate headers for download.
+
+### Usage with Offers
+When creating an offer, you can associate attachments by providing attachment IDs:
+
+**Request to create offer with attachments:**
+```json
+{
+    "model_id": 1,
+    "title": "BMW 320d",
+    "description": "Good condition vehicle",
+    "price": 15000,
+    "production_year": 2015,
+    "odometer": 120000,
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "body_type": "Sedan",
+    "attachment_ids": [1, 2, 3]
+}
+```
+
+The attachments will be stored as a JSON array in the offer's `attachments` field. Attachments are optional and not required when creating an offer.
+````

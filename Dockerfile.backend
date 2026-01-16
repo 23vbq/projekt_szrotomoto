@@ -4,6 +4,10 @@ RUN docker-php-ext-install pdo_mysql
 
 RUN a2enmod rewrite
 
+# Set PHP upload limits to 10MB
+RUN echo "upload_max_filesize = 10M" > /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "post_max_size = 10M" >> /usr/local/etc/php/conf.d/uploads.ini
+
 # Lokalizacja i język
 RUN apt-get update && apt-get install -y locales && \
     echo "pl_PL.UTF-8 UTF-8" >> /etc/locale.gen && \

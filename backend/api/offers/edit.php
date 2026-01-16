@@ -30,6 +30,22 @@ if ($offer['created_by'] != $currentUserId) {
     exit;
 }
 
+// Handle file uploads if provided
+$attachmentIds = $offer['attachments'] ? json_decode($offer['attachments'], true) : [];
+if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
+    for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
+        $attachmentId = AttachmentUploader::uploadFile([
+            'name' => $_FILES['files']['name'][$i],
+            'tmp_name' => $_FILES['files']['tmp_name'][$i],
+            'error' => $_FILES['files']['error'][$i],
+            'size' => $_FILES['files']['size'][$i]
+        ]);
+        if ($attachmentId !== null) {
+            $attachmentIds[] = $attachmentId;
+        }
+    }
+}
+
 $edit = [];
 $edit['title'] = isset($_POST['title']) && !empty($_POST['title']) ? trim($_POST['title']) : null;
 $edit['description'] = isset($_POST['description']) && !empty($_POST['description']) ? trim($_POST['description']) : null;
@@ -119,6 +135,7 @@ $stmt = Database::getPdo()->prepare('
         is_used = :is_used,
         has_warranty = :has_warranty,
         has_service_book = :has_service_book,
+        attachments = :attachments,
         updated_at = NOW()
     WHERE id = :offer_id
 ');
@@ -145,6 +162,7 @@ $result = $stmt->execute([
     ':is_used' => $offer['is_used'],
     ':has_warranty' => $offer['has_warranty'],
     ':has_service_book' => $offer['has_service_book'],
+    ':attachments' => !empty($attachmentIds) ? json_encode($attachmentIds) : null,
     ':offer_id' => $offerId
 ]);
 

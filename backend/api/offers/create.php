@@ -10,6 +10,29 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $currentUserId = Session::getUserId();
 
+// Parse attachment IDs if provided
+$attachmentIds = [];
+if (isset($_POST['attachment_ids'])) {
+    $attachmentIds = is_array($_POST['attachment_ids']) 
+        ? array_filter(array_map('intval', $_POST['attachment_ids']))
+        : [];
+}
+
+// Handle file uploads if provided
+if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
+    for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
+        $attachmentId = AttachmentUploader::uploadFile([
+            'name' => $_FILES['files']['name'][$i],
+            'tmp_name' => $_FILES['files']['tmp_name'][$i],
+            'error' => $_FILES['files']['error'][$i],
+            'size' => $_FILES['files']['size'][$i]
+        ]);
+        if ($attachmentId !== null) {
+            $attachmentIds[] = $attachmentId;
+        }
+    }
+}
+
 $modelId = isset($_POST['model_id']) ? $_POST['model_id'] : null;
 $title = isset($_POST['title']) ? trim($_POST['title']) : null;
 $description = isset($_POST['description']) ? trim($_POST['description']) : 'NULL';
@@ -83,7 +106,8 @@ $stmt = Database::getPdo()->prepare('
         is_used,
         has_warranty,
         has_service_book,
-        created_by)
+        created_by,
+        attachments)
     VALUES (
         :model_id,
         :title,
@@ -108,7 +132,8 @@ $stmt = Database::getPdo()->prepare('
         :is_used,
         :has_warranty,
         :has_service_book,
-        :created_by
+        :created_by,
+        :attachments
     )
 ');
 $result = $stmt->execute([
@@ -135,7 +160,8 @@ $result = $stmt->execute([
     ':is_used' => $isUsed ? 1 : 0,
     ':has_warranty' => $hasWarranty ? 1 : 0,
     ':has_service_book' => $hasServiceBook ? 1 : 0,
-    ':created_by' => $currentUserId
+    ':created_by' => $currentUserId,
+    ':attachments' => !empty($attachmentIds) ? json_encode($attachmentIds) : null
 ]);
 if (!$result) {
     Response::error('Failed to create offer', Response::HTTP_INTERNAL_SERVER_ERROR);
