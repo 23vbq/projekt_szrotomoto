@@ -4,6 +4,7 @@ class QueryBuilder {
 
     private array $select = [];
     private ?string $from = null;
+    private array $join = [];
     private array $where = [];
     private array $orderBy = [];
     private ?int $limit = null;
@@ -27,9 +28,53 @@ class QueryBuilder {
         return $this;
     }
 
-    public function from(string $table): self
+    public function from(string $table, ?string $alias = null): self
     {
-        $this->from = $table;
+        $this->from = $table . ($alias ? " $alias" : '');
+        return $this;
+    }
+
+    public function join(string $table, string $alias, string $condition): self
+    {
+        $this->join[] = [
+            'type' => 'JOIN',
+            'table' => $table,
+            'alias' => $alias,
+            'condition' => $condition
+        ];
+        return $this;
+    }
+
+    public function leftJoin(string $table, string $alias, string $condition): self
+    {
+        $this->join[] = [
+            'type' => 'LEFT JOIN',
+            'table' => $table,
+            'alias' => $alias,
+            'condition' => $condition
+        ];
+        return $this;
+    }
+
+    public function rightJoin(string $table, string $alias, string $condition): self
+    {
+        $this->join[] = [
+            'type' => 'RIGHT JOIN',
+            'table' => $table,
+            'alias' => $alias,
+            'condition' => $condition
+        ];
+        return $this;
+    }
+
+    public function innerJoin(string $table, string $alias, string $condition): self
+    {
+        $this->join[] = [
+            'type' => 'INNER JOIN',
+            'table' => $table,
+            'alias' => $alias,
+            'condition' => $condition
+        ];
         return $this;
     }
 
@@ -124,6 +169,12 @@ class QueryBuilder {
 
         if ($this->from !== null) {
             $query .= ' FROM ' . $this->from;
+        }
+
+        if (!empty($this->join)) {
+            foreach ($this->join as $join) {
+                $query .= ' ' . $join['type'] . ' ' . $join['table'] . ' ' . $join['alias'] . ' ON ' . $join['condition'];
+            }
         }
 
         if (!empty($this->where)) {
