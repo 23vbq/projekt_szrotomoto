@@ -382,6 +382,11 @@
 									"key": "has_service_book",
 									"value": "",
 									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": []
 								}
 							]
 						},
@@ -567,6 +572,65 @@
 									"key": "offer_id",
 									"value": null
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Attachments",
+			"item": [
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/attachments/show.php?id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"attachments",
+								"show.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/attachments/create.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"attachments",
+								"create.php"
 							]
 						}
 					},
