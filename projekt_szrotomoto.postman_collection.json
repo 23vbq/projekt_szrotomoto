@@ -239,6 +239,342 @@
 			]
 		},
 		{
+			"name": "Offers",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/offers/search.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"search.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "model_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "production_year",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "odometer",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "fuel_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "transmission",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "color",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "displacement",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "horsepower",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "torque",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "body_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "doors_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "seats_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "registration_number",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "country_of_origin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_accident_free",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_first_hand",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_used",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_warranty",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_service_book",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/offers/create.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"create.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "model_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "production_year",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "odometer",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "fuel_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "transmission",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "color",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "displacement",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "horsepower",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "torque",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "body_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "doors_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "seats_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "registration_number",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "country_of_origin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_accident_free",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_first_hand",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_used",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_warranty",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_service_book",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/offers/show.php?offer_id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"show.php"
+							],
+							"query": [
+								{
+									"key": "offer_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set as Sold",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/offers/setAsSold.php?offer_id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"setAsSold.php"
+							],
+							"query": [
+								{
+									"key": "offer_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Status",
 			"request": {
 				"method": "GET",
