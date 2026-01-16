@@ -804,8 +804,8 @@ Content:
 }
 ```
 
-### Show/Download
-Download an attachment by ID.
+### Show/Display
+Retrieve and display an attachment by ID.
 
 **Request:**
 
@@ -821,7 +821,7 @@ URL:
 
 Code: 200 (File found and returned) || (400 Bad Request - Invalid attachment ID) || (404 Not Found - Attachment not found)
 
-Content: File contents as binary data with appropriate headers for download.
+Content: Image file contents with appropriate Content-Type header (served inline for browser display).
 
 ### Usage with Offers
 When creating or editing an offer, you can upload attachments by providing `files[]` field. The uploaded files will be stored and associated with the offer automatically.
