@@ -26,6 +26,13 @@ class Session{
         $_SESSION['user_name'] = $userName;
     }
 
+    public static function getUserId(): ?int
+    {
+        self::start();
+
+        return isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+    }
+
     public static function logout(){
         self::start();
 
