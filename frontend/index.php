@@ -17,6 +17,8 @@
         <li><a href="/public/login.php">Login</a></li>
         <li><a href="/public/register.php">Register</a></li>
         <li><a href="/public/vehicles.php">Browse vehicles</a></li>
+        <li><a href="/public/offers.php">Browse offers</a></li>
+        <li><a href="/public/offers_create.php">Create offer</a></li>
       </ul>
     </nav>
 
