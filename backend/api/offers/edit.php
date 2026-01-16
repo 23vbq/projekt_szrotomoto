@@ -153,8 +153,20 @@ if (!$result) {
     exit;
 }
 
-$stmt = Database::getPdo()->prepare('SELECT * FROM offers WHERE id = :offer_id');
+$stmt = Database::getPdo()->prepare('
+    SELECT
+        o.*, 
+        b.name AS brand_name,
+        m.name AS model_name,
+        u.name AS user_name
+    FROM offers o
+    INNER JOIN models m ON o.model_id = m.id
+    INNER JOIN brands b ON m.brand_id = b.id
+    INNER JOIN users u ON o.created_by = u.id
+    WHERE o.id = :offer_id
+');
 $stmt->bindParam(':offer_id', $offerId, PDO::PARAM_INT);
 $stmt->execute();
+$offer = $stmt->fetch(PDO::FETCH_ASSOC);
 
 Response::json($stmt->fetch(PDO::FETCH_ASSOC));
