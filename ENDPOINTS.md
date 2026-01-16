@@ -75,9 +75,40 @@ URL:
 
 **Response:**
 
-Code: 201 (User created successfully) || (400 Bad Request - Invalid input) || (409 User already exists)
+Code: 201 (User created successfully) || (400 Bad Request) || (409 Conflict) || (500 Internal Server Error)
 
-Content: message indicating success or error details.
+Content:
+```json
+{
+    "message": "User registered successfully"
+}
+```
+
+**Error Responses:**
+- Missing required fields:
+```json
+{
+    "message": "Missing required fields"
+}
+```
+- Invalid email format:
+```json
+{
+    "message": "Invalid email format"
+}
+```
+- Passwords do not match:
+```json
+{
+    "message": "Passwords do not match"
+}
+```
+- Email already registered:
+```json
+{
+    "message": "Email is already registered"
+}
+```
 
 ### Login
 Login an existing user.
@@ -102,13 +133,33 @@ URL:
 
 **Response:**
 
-Code: 200 (Login successful) || (400 Bad Request - Invalid input) || (401 Unauthorized - Invalid credentials)
+Code: 200 (Login successful) || (400 Bad Request) || (401 Unauthorized) || (500 Internal Server Error)
 
-Content: message indicating success or error details.
+Content:
 ```json
 {
     "message": "Login successful",
     "user_name": "Handlarz Mirek"
+}
+```
+
+**Error Responses:**
+- Missing required fields:
+```json
+{
+    "message": "Missing required fields"
+}
+```
+- Invalid email format:
+```json
+{
+    "message": "Invalid email format"
+}
+```
+- Invalid email or password:
+```json
+{
+    "message": "Invalid email or password"
 }
 ```
 
@@ -123,11 +174,11 @@ URL:
 ```
 | Method | Auth required |
 | --- | --- |
-| * | Yes |
+| GET | Yes |
 
 **Response:**
 
-Code: 200
+Code: 200 (Logout successful) || (401 Unauthorized - Not authenticated)
 
 Content:
 ```json
@@ -170,11 +221,15 @@ Content:
 ```
 
 ### Models
-Get a filtered list of vehicle models for a given brand. Ordered alphabetically by name.
+Get a list of vehicle models. Optionally filter by brand. Ordered alphabetically by name.
 
 **Request:**
 
 URL:
+```
+/api/vehicles/models.php
+```
+or with optional brand filter:
 ```
 /api/vehicles/models.php?brand_id={brand_id}
 ```
@@ -184,7 +239,7 @@ URL:
 
 **Response:**
 
-Code: 200
+Code: 200 (Models found) || (400 Bad Request - Invalid brand_id)
 
 Content:
 ```json
@@ -438,7 +493,7 @@ Content: message indicating success or error details.
 ```
 
 ### Show
-Get a specific offer by ID.
+Get a specific offer by ID. Non-active offers can only be viewed by their creator.
 
 **Request:**
 
@@ -452,7 +507,7 @@ URL:
 
 **Response:**
 
-Code: 200 (Offer found) || (404 Not Found - Offer not found or inactive)
+Code: 200 (Offer found) || (400 Bad Request - Invalid offer_id) || (404 Not Found - Offer not found or inactive)
 
 Content:
 ```json
@@ -541,12 +596,42 @@ Validation:
 
 **Response:**
 
-Code: 200 (Offer updated successfully) || (400 Bad Request) || (401 Unauthorized) || (403 Forbidden - Not the offer creator) || (404 Not Found)
+Code: 200 (Offer updated successfully) || (400 Bad Request) || (401 Unauthorized) || (403 Forbidden - Not the offer creator) || (404 Not Found) || (500 Internal Server Error)
 
-Content: message indicating success or error details.
+Content: Returns the updated offer object.
 ```json
 {
-    "message": "Offer updated successfully"
+    "id": 1,
+    "created_at": "2025-12-28 10:30:00",
+    "updated_at": "2025-12-28 10:35:00",
+    "title": "BMW 320d",
+    "description": "Updated description",
+    "price": 14500,
+    "production_year": 2015,
+    "odometer": 120500,
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "color": "Black",
+    "displacement": 2000,
+    "horsepower": 184,
+    "torque": 400,
+    "body_type": "Sedan",
+    "doors_amount": 4,
+    "seats_amount": 5,
+    "vin": "WBADT43452G915989",
+    "registration_number": "WX12ABC",
+    "country_of_origin": "Poland",
+    "is_accident_free": 1,
+    "is_first_hand": 0,
+    "is_used": 1,
+    "has_warranty": 0,
+    "has_service_book": 1,
+    "status": "active",
+    "model_id": 1,
+    "created_by": 1,
+    "brand_name": "BMW",
+    "model_name": "Seria 3",
+    "user_name": "Handlarz Mirek"
 }
 ```
 
@@ -573,12 +658,42 @@ URL:
 
 **Response:**
 
-Code: 200 (Offer marked as sold) || (401 Unauthorized) || (403 Forbidden - Not the offer creator) || (404 Not Found)
+Code: 200 (Offer marked as sold) || (400 Bad Request - Invalid offer_id) || (401 Unauthorized) || (403 Forbidden - Not the offer creator) || (404 Not Found) || (500 Internal Server Error)
 
-Content: message indicating success or error details.
+Content: Returns the updated offer object.
 ```json
 {
-    "message": "Offer marked as sold"
+    "id": 1,
+    "created_at": "2025-12-28 10:30:00",
+    "updated_at": "2025-12-28 10:35:00",
+    "title": "BMW 320d",
+    "description": "Good condition vehicle",
+    "price": 15000,
+    "production_year": 2015,
+    "odometer": 120000,
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "color": "Black",
+    "displacement": 2000,
+    "horsepower": 184,
+    "torque": 400,
+    "body_type": "Sedan",
+    "doors_amount": 4,
+    "seats_amount": 5,
+    "vin": "WBADT43452G915989",
+    "registration_number": "WX12ABC",
+    "country_of_origin": "Poland",
+    "is_accident_free": 1,
+    "is_first_hand": 0,
+    "is_used": 1,
+    "has_warranty": 0,
+    "has_service_book": 1,
+    "status": "sold",
+    "model_id": 1,
+    "created_by": 1,
+    "brand_name": "BMW",
+    "model_name": "Seria 3",
+    "user_name": "Handlarz Mirek"
 }
 ```
 
@@ -597,11 +712,41 @@ URL:
 
 **Response:**
 
-Code: 200 (Offer removed) || (401 Unauthorized) || (403 Forbidden - Not the offer creator) || (404 Not Found)
+Code: 200 (Offer removed) || (400 Bad Request - Invalid offer_id) || (401 Unauthorized) || (403 Forbidden - Not the offer creator) || (404 Not Found) || (500 Internal Server Error)
 
-Content: message indicating success or error details.
+Content: Returns the updated offer object.
 ```json
 {
-    "message": "Offer removed successfully"
+    "id": 1,
+    "created_at": "2025-12-28 10:30:00",
+    "updated_at": "2025-12-28 10:35:00",
+    "title": "BMW 320d",
+    "description": "Good condition vehicle",
+    "price": 15000,
+    "production_year": 2015,
+    "odometer": 120000,
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "color": "Black",
+    "displacement": 2000,
+    "horsepower": 184,
+    "torque": 400,
+    "body_type": "Sedan",
+    "doors_amount": 4,
+    "seats_amount": 5,
+    "vin": "WBADT43452G915989",
+    "registration_number": "WX12ABC",
+    "country_of_origin": "Poland",
+    "is_accident_free": 1,
+    "is_first_hand": 0,
+    "is_used": 1,
+    "has_warranty": 0,
+    "has_service_book": 1,
+    "status": "removed",
+    "model_id": 1,
+    "created_by": 1,
+    "brand_name": "BMW",
+    "model_name": "Seria 3",
+    "user_name": "Handlarz Mirek"
 }
 ```
