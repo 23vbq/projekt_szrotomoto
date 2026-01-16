@@ -34,7 +34,7 @@
   <script src="/public/assets/js/api.js"></script>
   <script>
     async function loadBrands() {
-      const res = await apiFetch('/backend/api/vehicles/brands.php');
+  const res = await apiFetch('/api/vehicles/brands.php');
       const select = document.getElementById('brandSelect');
       if (res.ok && Array.isArray(res.data)) {
         res.data.forEach(b => {
@@ -49,7 +49,7 @@
     }
 
     async function loadModels(brandId) {
-      const url = brandId ? `/backend/api/vehicles/models.php?brand_id=${encodeURIComponent(brandId)}` : '/backend/api/vehicles/models.php';
+  const url = brandId ? `/api/vehicles/models.php?brand_id=${encodeURIComponent(brandId)}` : '/api/vehicles/models.php';
       const res = await apiFetch(url);
       const list = document.getElementById('modelsList');
       list.innerHTML = '';
@@ -73,7 +73,7 @@
     });
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-      const res = await apiFetch('/backend/api/login/logout.php', { method: 'POST' });
+  const res = await apiFetch('/api/login/logout.php', { method: 'POST' });
       if (res.ok) {
         window.location.href = '/public/index.php';
       } else {

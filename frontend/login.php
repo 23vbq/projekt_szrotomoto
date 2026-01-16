@@ -30,7 +30,7 @@
       e.preventDefault();
       const form = e.currentTarget;
       const data = new URLSearchParams(new FormData(form));
-      const res = await apiFetch('/backend/api/login/login.php', { method: 'POST', body: data });
+  const res = await apiFetch('/api/login/login.php', { method: 'POST', body: data });
 
       if (res.ok) {
         document.getElementById('message').textContent = res.data.user_name ? `Welcome, ${res.data.user_name}` : res.data.message;
