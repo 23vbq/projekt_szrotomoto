@@ -8,3 +8,13 @@ nav ul { list-style: none; padding: 0; display:flex; gap: 12px; }
 nav a { text-decoration: none; color: #0366d6 }
 #modelsList { padding-left: 18px; }
 #message { margin-top: 12px; color: #b00020 }
+
+/* Navigation styles */
+.site-nav { background: #f7f8fa; border-bottom: 1px solid #e6e6e6; }
+.site-nav .nav-inner { display:flex; align-items:center; justify-content:space-between; padding:10px 20px; }
+.site-nav .brand a { font-weight:700; color:#222; text-decoration:none }
+.site-nav nav a { margin-right: 14px; color:#0366d6; text-decoration:none }
+.site-nav .nav-auth { display:flex; gap:8px; align-items:center }
+.site-nav .nav-auth a { color:#0366d6; text-decoration:none }
+.nav-user { margin-left:8px; font-weight:600 }
+

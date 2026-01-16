@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/public/assets/css/style.css">
 </head>
 <body>
+  <?php include __DIR__ . '/_nav.php'; ?>
   <main class="container">
     <h1 id="title">Offer</h1>
     <div id="meta"></div>

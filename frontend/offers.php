@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/public/assets/css/style.css">
 </head>
 <body>
+  <?php include __DIR__ . '/_nav.php'; ?>
   <main class="container">
     <h1>Offers</h1>
 
@@ -39,9 +40,11 @@
 
       res.data.forEach(o => {
         const li = document.createElement('li');
-        const title = document.createElement('strong');
-        title.textContent = o.title + ' — ' + (o.brand_name || '') + ' ' + (o.model_name || '');
-        li.appendChild(title);
+        const a = document.createElement('a');
+        a.href = `/public/offer.php?offer_id=${encodeURIComponent(o.id)}`;
+        a.textContent = o.title + ' — ' + (o.brand_name || '') + ' ' + (o.model_name || '');
+        a.style.fontWeight = '600';
+        li.appendChild(a);
         const meta = document.createElement('div');
         meta.textContent = `${o.production_year || ''} • ${o.price || ''} PLN`;
         li.appendChild(meta);
@@ -53,7 +56,11 @@
           img.style.maxWidth = '200px';
           img.style.display = 'block';
           img.style.marginTop = '6px';
-          li.appendChild(img);
+          // wrap image with link to detail page
+          const imgLink = document.createElement('a');
+          imgLink.href = `/public/offer.php?offer_id=${encodeURIComponent(o.id)}`;
+          imgLink.appendChild(img);
+          li.appendChild(imgLink);
         }
 
         list.appendChild(li);
