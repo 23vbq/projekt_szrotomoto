@@ -6,12 +6,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// Extract attachment ID from URL path
-$pathInfo = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$matches = [];
-if (preg_match('/\/api\/attachments\/(\d+)/', $pathInfo, $matches)) {
-    $attachmentId = (int) $matches[1];
-} else {
+// Get attachment ID from query parameter
+$attachmentId = isset($_GET['id']) ? (int) $_GET['id'] : null;
+if (empty($attachmentId)) {
     Response::error('Attachment ID not provided', Response::HTTP_BAD_REQUEST);
     exit;
 }
@@ -19,7 +16,7 @@ if (preg_match('/\/api\/attachments\/(\d+)/', $pathInfo, $matches)) {
 // Fetch attachment from database
 try {
     $stmt = Database::getPdo()->prepare('
-        SELECT filename FROM attachments WHERE id = :id
+        SELECT filename, mime_type FROM attachments WHERE id = :id
     ');
     $stmt->execute([':id' => $attachmentId]);
     $attachment = $stmt->fetch();
@@ -37,9 +34,8 @@ try {
         exit;
     }
 
-    // Serve the file
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+    // Serve the file as inline image with stored MIME type
+    header('Content-Type: ' . $attachment['mime_type']);
     header('Content-Length: ' . filesize($filePath));
     readfile($filePath);
     exit;

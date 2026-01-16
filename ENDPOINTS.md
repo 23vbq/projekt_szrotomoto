@@ -407,6 +407,7 @@ Content:
         "body_type": "Sedan",
         "doors_amount": 4,
         "seats_amount": 5,
+        "attachment_id": 1,
         "brand_name": "BMW",
         "model_name": "Seria 3",
         "user_name": "Handlarz Mirek"
@@ -431,7 +432,6 @@ URL:
 **Request Body:**
 Form data (multipart/form-data) containing:
 - Text fields: `model_id`, `title`, `description`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `color`, `displacement`, `horsepower`, `torque`, `body_type`, `doors_amount`, `seats_amount`, `vin`, `registration_number`, `country_of_origin`, `is_accident_free`, `is_first_hand`, `is_used`, `has_warranty`, `has_service_book`
-- Optional: `attachment_ids[]` - array of pre-uploaded attachment IDs
 - Optional: `files[]` - files to upload directly with the offer
 
 Example JSON representation:
@@ -459,22 +459,18 @@ Example JSON representation:
     "is_first_hand": "0",
     "is_used": "1",
     "has_warranty": "0",
-    "has_service_book": "1",
-    "attachment_ids": [1, 2, 3]
+    "has_service_book": "1"
 }
 ```
 
-Note: Files can be uploaded in two ways:
-1. Pre-upload files using `/api/attachments/create.php` and pass `attachment_ids`
-2. Pass files directly in the `files[]` field (they will be uploaded automatically)
-
-Required fields: `model_id`, `title`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `body_type`
+Required fields: `model_id`, `title`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `body_type`, `vin`
 
 Validation:
 - `fuel_type` must be one of the valid fuel types from `/api/values/fuelType.php`
 - `transmission` must be one of the valid transmission types from `/api/values/transmissionType.php`
 - `body_type` must be one of the valid body types from `/api/values/bodyType.php`
 - `country_of_origin` (if provided) must be one of the valid countries from `/api/values/countries.php`
+- `vin` must be unique across all offers
 - Boolean fields (`is_accident_free`, `is_first_hand`, `is_used`, `has_warranty`, `has_service_book`) accept "1" or "0" or empty
 
 **Response:**
@@ -600,8 +596,6 @@ All fields are optional, only the fields you want to update:
 ```
 
 Note: When editing via multipart/form-data, you can also include `files[]` to upload new attachments. They will be added to the existing attachments.
-
-Validation:
 - `fuel_type` (if provided) must be one of the valid fuel types from `/api/values/fuelType.php`
 - `transmission` (if provided) must be one of the valid transmission types from `/api/values/transmissionType.php`
 - `body_type` (if provided) must be one of the valid body types from `/api/values/bodyType.php`
@@ -830,23 +824,7 @@ Code: 200 (File found and returned) || (400 Bad Request - Invalid attachment ID)
 Content: File contents as binary data with appropriate headers for download.
 
 ### Usage with Offers
-When creating an offer, you can associate attachments by providing attachment IDs:
+When creating or editing an offer, you can upload attachments by providing `files[]` field. The uploaded files will be stored and associated with the offer automatically.
 
-**Request to create offer with attachments:**
-```json
-{
-    "model_id": 1,
-    "title": "BMW 320d",
-    "description": "Good condition vehicle",
-    "price": 15000,
-    "production_year": 2015,
-    "odometer": 120000,
-    "fuel_type": "Diesel",
-    "transmission": "Manual",
-    "body_type": "Sedan",
-    "attachment_ids": [1, 2, 3]
-}
-```
-
-The attachments will be stored as a JSON array in the offer's `attachments` field. Attachments are optional and not required when creating an offer.
+Attachments are optional and not required when creating an offer.
 ````

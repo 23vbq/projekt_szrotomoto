@@ -10,22 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $currentUserId = Session::getUserId();
 
-// Parse attachment IDs if provided
-$attachmentIds = [];
-if (isset($_POST['attachment_ids'])) {
-    $attachmentIds = is_array($_POST['attachment_ids']) 
-        ? array_filter(array_map('intval', $_POST['attachment_ids']))
-        : [];
-}
-
 // Handle file uploads if provided
-if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
-    for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
+$attachmentIds = [];
+if (isset($_FILES['files']) && !empty($_FILES['files']['name'])) {
+    $files = $_FILES['files'];
+    $fileCount = is_array($files['name']) ? count($files['name']) : 1;
+    
+    for ($i = 0; $i < $fileCount; $i++) {
         $attachmentId = AttachmentUploader::uploadFile([
-            'name' => $_FILES['files']['name'][$i],
-            'tmp_name' => $_FILES['files']['tmp_name'][$i],
-            'error' => $_FILES['files']['error'][$i],
-            'size' => $_FILES['files']['size'][$i]
+            'name' => is_array($files['name']) ? $files['name'][$i] : $files['name'],
+            'tmp_name' => is_array($files['tmp_name']) ? $files['tmp_name'][$i] : $files['tmp_name'],
+            'error' => is_array($files['error']) ? $files['error'][$i] : $files['error'],
+            'size' => is_array($files['size']) ? $files['size'][$i] : $files['size']
         ]);
         if ($attachmentId !== null) {
             $attachmentIds[] = $attachmentId;
@@ -48,7 +44,7 @@ $torque = isset($_POST['torque']) ? $_POST['torque'] : 'NULL';
 $bodyType = isset($_POST['body_type']) ? $_POST['body_type'] : null;
 $doorsAmount = isset($_POST['doors_amount']) ? $_POST['doors_amount'] : 'NULL';
 $seatsAmount = isset($_POST['seats_amount']) ? $_POST['seats_amount'] : 'NULL';
-$vin = isset($_POST['vin']) ? trim($_POST['vin']) : 'NULL';
+$vin = isset($_POST['vin']) ? trim($_POST['vin']) : null;
 $registrationNumber = isset($_POST['registration_number']) ? trim($_POST['registration_number']) : 'NULL';
 $countryOfOrigin = isset($_POST['country_of_origin']) ? $_POST['country_of_origin'] : 'NULL';
 $isAccidentFree = isset($_POST['is_accident_free']) ? $_POST['is_accident_free'] == '1' : false;
@@ -66,6 +62,7 @@ if (
     || empty($fuelType)
     || empty($transmission)
     || empty($bodyType)
+    || empty($vin)
 ) {
     Response::error('Missing required fields', Response::HTTP_BAD_REQUEST);
     exit;
@@ -79,6 +76,16 @@ $countryOfOrigin = in_array($countryOfOrigin, Consts::getCountries()) ? $country
 if ($fuelType === null || $transmission === null || $bodyType === null) {
     Response::error('Invalid request data', Response::HTTP_BAD_REQUEST);
     exit;
+}
+
+// Validate VIN is unique if provided
+if ($vin !== 'NULL') {
+    $stmt = Database::getPdo()->prepare('SELECT id FROM offers WHERE vin = :vin');
+    $stmt->execute([':vin' => $vin]);
+    if ($stmt->fetch()) {
+        Response::error('VIN already exists', Response::HTTP_CONFLICT);
+        exit;
+    }
 }
 
 $stmt = Database::getPdo()->prepare('

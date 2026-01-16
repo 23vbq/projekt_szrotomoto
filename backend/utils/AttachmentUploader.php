@@ -54,11 +54,12 @@ class AttachmentUploader {
 
         try {
             $stmt = Database::getPdo()->prepare('
-                INSERT INTO attachments (filename)
-                VALUES (:filename)
+                INSERT INTO attachments (filename, mime_type)
+                VALUES (:filename, :mime_type)
             ');
             $result = $stmt->execute([
-                ':filename' => $uniqueFileName
+                ':filename' => $uniqueFileName,
+                ':mime_type' => $mimeType
             ]);
 
             if ($result) {
