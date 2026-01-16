@@ -30,6 +30,24 @@ if ($offer['created_by'] != $currentUserId) {
     exit;
 }
 
+$attachmentIds = $offer['attachments'] ? json_decode($offer['attachments'], true) : [];
+if (isset($_FILES['files']) && !empty($_FILES['files']['name'])) {
+    $files = $_FILES['files'];
+    $fileCount = is_array($files['name']) ? count($files['name']) : 1;
+    
+    for ($i = 0; $i < $fileCount; $i++) {
+        $attachmentId = AttachmentUploader::uploadFile([
+            'name' => is_array($files['name']) ? $files['name'][$i] : $files['name'],
+            'tmp_name' => is_array($files['tmp_name']) ? $files['tmp_name'][$i] : $files['tmp_name'],
+            'error' => is_array($files['error']) ? $files['error'][$i] : $files['error'],
+            'size' => is_array($files['size']) ? $files['size'][$i] : $files['size']
+        ]);
+        if ($attachmentId !== null) {
+            $attachmentIds[] = $attachmentId;
+        }
+    }
+}
+
 $edit = [];
 $edit['title'] = isset($_POST['title']) && !empty($_POST['title']) ? trim($_POST['title']) : null;
 $edit['description'] = isset($_POST['description']) && !empty($_POST['description']) ? trim($_POST['description']) : null;
@@ -70,6 +88,15 @@ if ($edit['countryOfOrigin'] !== null) {
 if ($edit['fuelType'] === false || $edit['transmission'] === false || $edit['bodyType'] === false || $edit['countryOfOrigin'] === false) {
     Response::error('Invalid request data', Response::HTTP_BAD_REQUEST);
     exit;
+}
+
+if ($edit['vin'] !== null) {
+    $stmt = Database::getPdo()->prepare('SELECT id FROM offers WHERE vin = :vin AND id != :offer_id');
+    $stmt->execute([':vin' => $edit['vin'], ':offer_id' => $offerId]);
+    if ($stmt->fetch()) {
+        Response::error('VIN already exists', Response::HTTP_CONFLICT);
+        exit;
+    }
 }
 
 $offer['title'] = $edit['title'] ?? $offer['title'];
@@ -119,6 +146,7 @@ $stmt = Database::getPdo()->prepare('
         is_used = :is_used,
         has_warranty = :has_warranty,
         has_service_book = :has_service_book,
+        attachments = :attachments,
         updated_at = NOW()
     WHERE id = :offer_id
 ');
@@ -145,6 +173,7 @@ $result = $stmt->execute([
     ':is_used' => $offer['is_used'],
     ':has_warranty' => $offer['has_warranty'],
     ':has_service_book' => $offer['has_service_book'],
+    ':attachments' => !empty($attachmentIds) ? json_encode($attachmentIds) : null,
     ':offer_id' => $offerId
 ]);
 

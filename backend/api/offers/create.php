@@ -10,6 +10,25 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $currentUserId = Session::getUserId();
 
+// Handle file uploads if provided
+$attachmentIds = [];
+if (isset($_FILES['files']) && !empty($_FILES['files']['name'])) {
+    $files = $_FILES['files'];
+    $fileCount = is_array($files['name']) ? count($files['name']) : 1;
+    
+    for ($i = 0; $i < $fileCount; $i++) {
+        $attachmentId = AttachmentUploader::uploadFile([
+            'name' => is_array($files['name']) ? $files['name'][$i] : $files['name'],
+            'tmp_name' => is_array($files['tmp_name']) ? $files['tmp_name'][$i] : $files['tmp_name'],
+            'error' => is_array($files['error']) ? $files['error'][$i] : $files['error'],
+            'size' => is_array($files['size']) ? $files['size'][$i] : $files['size']
+        ]);
+        if ($attachmentId !== null) {
+            $attachmentIds[] = $attachmentId;
+        }
+    }
+}
+
 $modelId = isset($_POST['model_id']) ? $_POST['model_id'] : null;
 $title = isset($_POST['title']) ? trim($_POST['title']) : null;
 $description = isset($_POST['description']) ? trim($_POST['description']) : 'NULL';
@@ -25,7 +44,7 @@ $torque = isset($_POST['torque']) ? $_POST['torque'] : 'NULL';
 $bodyType = isset($_POST['body_type']) ? $_POST['body_type'] : null;
 $doorsAmount = isset($_POST['doors_amount']) ? $_POST['doors_amount'] : 'NULL';
 $seatsAmount = isset($_POST['seats_amount']) ? $_POST['seats_amount'] : 'NULL';
-$vin = isset($_POST['vin']) ? trim($_POST['vin']) : 'NULL';
+$vin = isset($_POST['vin']) ? trim($_POST['vin']) : null;
 $registrationNumber = isset($_POST['registration_number']) ? trim($_POST['registration_number']) : 'NULL';
 $countryOfOrigin = isset($_POST['country_of_origin']) ? $_POST['country_of_origin'] : 'NULL';
 $isAccidentFree = isset($_POST['is_accident_free']) ? $_POST['is_accident_free'] == '1' : false;
@@ -43,6 +62,7 @@ if (
     || empty($fuelType)
     || empty($transmission)
     || empty($bodyType)
+    || empty($vin)
 ) {
     Response::error('Missing required fields', Response::HTTP_BAD_REQUEST);
     exit;
@@ -56,6 +76,15 @@ $countryOfOrigin = in_array($countryOfOrigin, Consts::getCountries()) ? $country
 if ($fuelType === null || $transmission === null || $bodyType === null) {
     Response::error('Invalid request data', Response::HTTP_BAD_REQUEST);
     exit;
+}
+
+if ($vin !== 'NULL') {
+    $stmt = Database::getPdo()->prepare('SELECT id FROM offers WHERE vin = :vin');
+    $stmt->execute([':vin' => $vin]);
+    if ($stmt->fetch()) {
+        Response::error('VIN already exists', Response::HTTP_CONFLICT);
+        exit;
+    }
 }
 
 $stmt = Database::getPdo()->prepare('
@@ -83,7 +112,8 @@ $stmt = Database::getPdo()->prepare('
         is_used,
         has_warranty,
         has_service_book,
-        created_by)
+        created_by,
+        attachments)
     VALUES (
         :model_id,
         :title,
@@ -108,7 +138,8 @@ $stmt = Database::getPdo()->prepare('
         :is_used,
         :has_warranty,
         :has_service_book,
-        :created_by
+        :created_by,
+        :attachments
     )
 ');
 $result = $stmt->execute([
@@ -135,7 +166,8 @@ $result = $stmt->execute([
     ':is_used' => $isUsed ? 1 : 0,
     ':has_warranty' => $hasWarranty ? 1 : 0,
     ':has_service_book' => $hasServiceBook ? 1 : 0,
-    ':created_by' => $currentUserId
+    ':created_by' => $currentUserId,
+    ':attachments' => !empty($attachmentIds) ? json_encode($attachmentIds) : null
 ]);
 if (!$result) {
     Response::error('Failed to create offer', Response::HTTP_INTERNAL_SERVER_ERROR);

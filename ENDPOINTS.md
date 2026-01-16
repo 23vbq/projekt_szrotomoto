@@ -407,6 +407,7 @@ Content:
         "body_type": "Sedan",
         "doors_amount": 4,
         "seats_amount": 5,
+        "attachment_id": 1,
         "brand_name": "BMW",
         "model_name": "Seria 3",
         "user_name": "Handlarz Mirek"
@@ -429,6 +430,11 @@ URL:
 | POST | Yes |
 
 **Request Body:**
+Form data (multipart/form-data) containing:
+- Text fields: `model_id`, `title`, `description`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `color`, `displacement`, `horsepower`, `torque`, `body_type`, `doors_amount`, `seats_amount`, `vin`, `registration_number`, `country_of_origin`, `is_accident_free`, `is_first_hand`, `is_used`, `has_warranty`, `has_service_book`
+- Optional: `files[]` - files to upload directly with the offer
+
+Example JSON representation:
 ```json
 {
     "model_id": 1,
@@ -457,13 +463,14 @@ URL:
 }
 ```
 
-Required fields: `model_id`, `title`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `body_type`
+Required fields: `model_id`, `title`, `price`, `production_year`, `odometer`, `fuel_type`, `transmission`, `body_type`, `vin`
 
 Validation:
 - `fuel_type` must be one of the valid fuel types from `/api/values/fuelType.php`
 - `transmission` must be one of the valid transmission types from `/api/values/transmissionType.php`
 - `body_type` must be one of the valid body types from `/api/values/bodyType.php`
 - `country_of_origin` (if provided) must be one of the valid countries from `/api/values/countries.php`
+- `vin` must be unique across all offers
 - Boolean fields (`is_accident_free`, `is_first_hand`, `is_used`, `has_warranty`, `has_service_book`) accept "1" or "0" or empty
 
 **Response:**
@@ -588,7 +595,7 @@ All fields are optional, only the fields you want to update:
 }
 ```
 
-Validation:
+Note: When editing via multipart/form-data, you can also include `files[]` to upload new attachments. They will be added to the existing attachments.
 - `fuel_type` (if provided) must be one of the valid fuel types from `/api/values/fuelType.php`
 - `transmission` (if provided) must be one of the valid transmission types from `/api/values/transmissionType.php`
 - `body_type` (if provided) must be one of the valid body types from `/api/values/bodyType.php`
@@ -750,3 +757,74 @@ Content: Returns the updated offer object.
     "user_name": "Handlarz Mirek"
 }
 ```
+
+# Attachments
+### Upload
+Upload an image attachment. Requires authentication. File is stored with unique name in `/mnt/szrotomoto_data`. Returns attachment ID that can be associated with offers.
+
+**Request:**
+
+URL:
+```
+/api/attachments/create.php
+```
+| Method | Auth required |
+| --- | --- |
+| POST | Yes |
+
+**Request Body:**
+Multipart form data (multipart/form-data) containing:
+- Text fields: `file` field containing an image file
+- Max file size: 10MB
+- Allowed MIME types: image/jpeg, image/png, image/gif, image/webp
+
+**Response:**
+
+Code: 201 (File uploaded successfully) || (400 Bad Request - No file provided) || (401 Unauthorized) || (500 Internal Server Error)
+
+Content:
+```json
+{
+    "attachment_id": 1,
+    "message": "File uploaded successfully"
+}
+```
+
+**Error Responses:**
+- No file provided:
+```json
+{
+    "message": "No file provided"
+}
+```
+- Upload failure:
+```json
+{
+    "message": "Failed to upload file"
+}
+```
+
+### Show/Display
+Retrieve and display an attachment by ID.
+
+**Request:**
+
+URL:
+```
+/api/attachments/show.php?id={attachment_id}
+```
+| Method | Auth required |
+| --- | --- |
+| GET | No |
+
+**Response:**
+
+Code: 200 (File found and returned) || (400 Bad Request - Invalid attachment ID) || (404 Not Found - Attachment not found)
+
+Content: Image file contents with appropriate Content-Type header (served inline for browser display).
+
+### Usage with Offers
+When creating or editing an offer, you can upload attachments by providing `files[]` field. The uploaded files will be stored and associated with the offer automatically.
+
+Attachments are optional and not required when creating an offer.
+````
