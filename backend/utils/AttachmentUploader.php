@@ -10,12 +10,6 @@ class AttachmentUploader {
         'image/webp'
     ];
 
-    /**
-     * Upload a single file and create attachment record
-     * 
-     * @param array $file Single file from $_FILES['file'] or $_FILES['files'][i]
-     * @return int|null Attachment ID or null if upload failed
-     */
     public static function uploadFile($file): ?int {
         if (!isset($file['name']) || empty($file['name'])) {
             return null;

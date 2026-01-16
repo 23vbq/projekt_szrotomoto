@@ -78,7 +78,6 @@ if ($fuelType === null || $transmission === null || $bodyType === null) {
     exit;
 }
 
-// Validate VIN is unique if provided
 if ($vin !== 'NULL') {
     $stmt = Database::getPdo()->prepare('SELECT id FROM offers WHERE vin = :vin');
     $stmt->execute([':vin' => $vin]);

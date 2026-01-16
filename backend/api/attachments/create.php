@@ -8,13 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Check if file was uploaded
 if (!isset($_FILES['file'])) {
     Response::error('No file provided', Response::HTTP_BAD_REQUEST);
     exit;
 }
 
-// Upload file
 $attachmentId = AttachmentUploader::uploadFile($_FILES['file']);
 
 if ($attachmentId === null) {

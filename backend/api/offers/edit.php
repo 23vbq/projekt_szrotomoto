@@ -30,7 +30,6 @@ if ($offer['created_by'] != $currentUserId) {
     exit;
 }
 
-// Handle file uploads if provided
 $attachmentIds = $offer['attachments'] ? json_decode($offer['attachments'], true) : [];
 if (isset($_FILES['files']) && !empty($_FILES['files']['name'])) {
     $files = $_FILES['files'];
@@ -91,7 +90,6 @@ if ($edit['fuelType'] === false || $edit['transmission'] === false || $edit['bod
     exit;
 }
 
-// Validate VIN is unique if provided (excluding current offer)
 if ($edit['vin'] !== null) {
     $stmt = Database::getPdo()->prepare('SELECT id FROM offers WHERE vin = :vin AND id != :offer_id');
     $stmt->execute([':vin' => $edit['vin'], ':offer_id' => $offerId]);
