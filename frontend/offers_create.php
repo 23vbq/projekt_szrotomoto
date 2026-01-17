@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Create Offer — Szrotomoto</title>
+  <title>Create Offer - Szrotomoto</title>
   <link rel="stylesheet" href="/public/assets/css/style.css">
   <script src="/public/assets/js/api.js"></script>
 </head>

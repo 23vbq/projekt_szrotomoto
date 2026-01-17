@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Register — Szrotomoto</title>
+  <title>Register - Szrotomoto</title>
   <link rel="stylesheet" href="/public/assets/css/style.css">
   <script src="/public/assets/js/api.js"></script>
 </head>
