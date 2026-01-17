@@ -12,12 +12,21 @@ if (empty($offerId) || !is_numeric($offerId)) {
     exit;
 }
 
+Session::start();
+$currentUserId = Session::getUserId();
+
+$currentUserIdForQuery = $currentUserId !== null ? $currentUserId : -1;
+
 $stmt = Database::getPdo()->prepare('
     SELECT
         o.*, 
         b.name AS brand_name,
         m.name AS model_name,
-        u.name AS user_name
+        u.name AS user_name,
+        CASE
+            WHEN o.created_by = :current_user_id AND :current_user_id_check > 0 THEN 1
+            ELSE 0
+        END AS isCurrentUserOwner
     FROM offers o
     INNER JOIN models m ON o.model_id = m.id
     INNER JOIN brands b ON m.brand_id = b.id
@@ -25,6 +34,8 @@ $stmt = Database::getPdo()->prepare('
     WHERE o.id = :offer_id
 ');
 $stmt->bindParam(':offer_id', $offerId, PDO::PARAM_INT);
+$stmt->bindValue(':current_user_id', $currentUserIdForQuery, PDO::PARAM_INT);
+$stmt->bindValue(':current_user_id_check', $currentUserIdForQuery, PDO::PARAM_INT);
 $stmt->execute();
 $offer = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -37,5 +48,7 @@ if ($offer['status'] !== Consts::OFFER_STATUS_ACTIVE && $offer['created_by'] != 
     Response::error('Offer not found', Response::HTTP_NOT_FOUND);
     exit;
 }
+
+$offer['isCurrentUserOwner'] = (bool)$offer['isCurrentUserOwner'];
 
 Response::json($offer);

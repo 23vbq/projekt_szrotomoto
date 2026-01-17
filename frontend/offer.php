@@ -139,36 +139,38 @@ include __DIR__ . '/_partials/head.php';
       const actions = document.getElementById('actions');
       actions.innerHTML = '';
 
-      const setSoldBtn = document.createElement('button');
-      setSoldBtn.textContent = 'Oznacz jako sprzedane';
-      setSoldBtn.className = 'w-full px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors';
-      setSoldBtn.addEventListener('click', async () => {
-        if (!confirm('Czy na pewno chcesz oznaczyć tę ofertę jako sprzedaną?')) return;
-        const r = await apiFetch(`/api/offers/setAsSold.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
-        if (r.ok) {
-          alert('Oferta została oznaczona jako sprzedana');
-          loadOffer();
-        } else {
-          alert(r.error || 'Nie udało się oznaczyć oferty jako sprzedanej');
-        }
-      });
+      if (o.isCurrentUserOwner === true) {
+        const setSoldBtn = document.createElement('button');
+        setSoldBtn.textContent = 'Oznacz jako sprzedane';
+        setSoldBtn.className = 'w-full px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors';
+        setSoldBtn.addEventListener('click', async () => {
+          if (!confirm('Czy na pewno chcesz oznaczyć tę ofertę jako sprzedaną?')) return;
+          const r = await apiFetch(`/api/offers/setAsSold.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
+          if (r.ok) {
+            alert('Oferta została oznaczona jako sprzedana');
+            loadOffer();
+          } else {
+            alert(r.error || 'Nie udało się oznaczyć oferty jako sprzedanej');
+          }
+        });
 
-      const removeBtn = document.createElement('button');
-      removeBtn.textContent = 'Usuń ofertę';
-      removeBtn.className = 'w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors';
-      removeBtn.addEventListener('click', async () => {
-        if (!confirm('Czy na pewno chcesz usunąć tę ofertę? Ta operacja jest nieodwracalna.')) return;
-        const r = await apiFetch(`/api/offers/setAsRemoved.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
-        if (r.ok) {
-          alert('Oferta została usunięta');
-          window.location.href = '/offers.php';
-        } else {
-          alert(r.error || 'Nie udało się usunąć oferty');
-        }
-      });
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Usuń ofertę';
+        removeBtn.className = 'w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors';
+        removeBtn.addEventListener('click', async () => {
+          if (!confirm('Czy na pewno chcesz usunąć tę ofertę? Ta operacja jest nieodwracalna.')) return;
+          const r = await apiFetch(`/api/offers/setAsRemoved.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
+          if (r.ok) {
+            alert('Oferta została usunięta');
+            window.location.href = '/offers.php';
+          } else {
+            alert(r.error || 'Nie udało się usunąć oferty');
+          }
+        });
 
-      actions.appendChild(setSoldBtn);
-      actions.appendChild(removeBtn);
+        actions.appendChild(setSoldBtn);
+        actions.appendChild(removeBtn);
+      }
     }
 
     loadOffer();
