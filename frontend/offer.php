@@ -47,6 +47,12 @@ include __DIR__ . '/_partials/head.php';
       return params.get(name);
     }
 
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
     async function loadOffer() {
       const id = qs('offer_id');
       if (!id) {
@@ -72,7 +78,6 @@ include __DIR__ . '/_partials/head.php';
       document.getElementById('meta').textContent = `${o.brand_name || ''} ${o.model_name || ''} • ${o.production_year || ''} rok`;
 
       // Gallery
-      const gallery = document.getElementById('gallery');
       gallery.innerHTML = '';
       try {
         const attachments = o.attachments ? JSON.parse(o.attachments) : null;
@@ -97,7 +102,6 @@ include __DIR__ . '/_partials/head.php';
       details.innerHTML = '<h2 class="text-xl font-bold text-slate-900 mb-4">Szczegóły oferty</h2>';
       
       const fields = [
-        ['Opis', 'description'],
         ['Przebieg', 'odometer', ' km'],
         ['Paliwo', 'fuel_type'],
         ['Skrzynia biegów', 'transmission'],
@@ -170,6 +174,19 @@ include __DIR__ . '/_partials/head.php';
 
         actions.appendChild(setSoldBtn);
         actions.appendChild(removeBtn);
+      }
+
+      // Description - at the bottom
+      if (o.description && o.description.trim() !== '') {
+        const descriptionSection = document.createElement('div');
+        descriptionSection.className = 'bg-white border border-gray-200 p-6 rounded-xl shadow-sm mt-6';
+        const descriptionText = document.createElement('p');
+        descriptionText.className = 'text-base text-slate-700 whitespace-pre-wrap';
+        descriptionText.textContent = o.description;
+        descriptionSection.innerHTML = '<h2 class="text-xl font-bold text-slate-900 mb-3">Opis oferty</h2>';
+        descriptionSection.appendChild(descriptionText);
+        const offerContent = document.getElementById('offerContent');
+        offerContent.appendChild(descriptionSection);
       }
     }
 

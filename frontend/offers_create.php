@@ -37,6 +37,11 @@ include __DIR__ . '/_partials/head.php';
             <input name="title" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="np. BMW 320d w doskonałym stanie">
           </div>
           
+          <div class="md:col-span-2">
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Opis oferty</label>
+            <textarea name="description" rows="5" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y" placeholder="Opisz szczegóły pojazdu, jego stan, historię, dodatkowe wyposażenie itp."></textarea>
+          </div>
+          
           <div>
             <label class="block mb-2 text-sm font-semibold text-slate-900">Cena (PLN) *</label>
             <input type="number" name="price" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="15000">
