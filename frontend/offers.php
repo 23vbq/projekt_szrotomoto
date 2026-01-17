@@ -11,19 +11,27 @@ include __DIR__ . '/_partials/head.php';
     
     <!-- Search Bar -->
     <div class="mb-6">
-      <div class="relative">
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Szukaj po tytule, opisie, marce, modelu, VIN lub numerze rejestracyjnym..." 
-          class="w-full px-4 py-3 pl-12 pr-12 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+      <div class="flex gap-2">
+        <div class="relative flex-1">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Szukaj po tytule, opisie, marce, modelu, VIN lub numerze rejestracyjnym..." 
+            class="w-full px-4 py-3 pl-12 pr-4 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          >
+          <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <button 
+          id="searchButton" 
+          class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg whitespace-nowrap"
         >
-        <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
+          Szukaj
+        </button>
         <button 
           id="clearSearch" 
-          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
+          class="px-4 py-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors hidden"
           title="Wyczyść wyszukiwanie"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,14 +71,16 @@ include __DIR__ . '/_partials/head.php';
 
     <div id="filtersPanel" class="hidden mb-6 bg-white p-5 border border-gray-200 rounded-xl shadow-sm">
       <h3 class="text-lg font-semibold text-slate-900 mb-4">Filtry wyszukiwania</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      
+      <!-- Select filters -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
         <div>
           <label for="brandSelect" class="block mb-2 text-sm font-medium text-gray-700">Marka</label>
           <select id="brandSelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolna --</option></select>
         </div>
         <div>
           <label for="modelSelect" class="block mb-2 text-sm font-medium text-gray-700">Model</label>
-          <select id="modelSelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolny --</option></select>
+          <select id="modelSelect" disabled class="w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm cursor-not-allowed"><option value="">-- wybierz markę --</option></select>
         </div>
         <div>
           <label for="fuelSelect" class="block mb-2 text-sm font-medium text-gray-700">Paliwo</label>
@@ -85,6 +95,35 @@ include __DIR__ . '/_partials/head.php';
           <select id="bodySelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolny --</option></select>
         </div>
       </div>
+
+      <!-- Range filters -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-700">Cena (PLN)</label>
+          <div class="flex gap-2 items-center">
+            <input type="number" id="priceMin" placeholder="Od" min="0" step="100" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+            <span class="text-gray-500">-</span>
+            <input type="number" id="priceMax" placeholder="Do" min="0" step="100" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-700">Rok produkcji</label>
+          <div class="flex gap-2 items-center">
+            <input type="number" id="yearMin" placeholder="Od" min="1900" max="2100" step="1" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+            <span class="text-gray-500">-</span>
+            <input type="number" id="yearMax" placeholder="Do" min="1900" max="2100" step="1" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-700">Przebieg (km)</label>
+          <div class="flex gap-2 items-center">
+            <input type="number" id="odometerMin" placeholder="Od" min="0" step="1000" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+            <span class="text-gray-500">-</span>
+            <input type="number" id="odometerMax" placeholder="Do" min="0" step="1000" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+          </div>
+        </div>
+      </div>
+
       <div class="mt-4 flex gap-3">
         <button id="applyFilters" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">Zastosuj</button>
         <button id="clearFilters" class="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">Wyczyść</button>
@@ -97,33 +136,28 @@ include __DIR__ . '/_partials/head.php';
   </main>
 
   <script>
-    // Check authentication and show/hide create offer button
     (async function() {
       try {
         const authRes = await window.apiFetch('/api/login/me.php', { method: 'GET' });
         const createOfferBtn = document.getElementById('createOfferBtn');
         
         if (authRes.ok && authRes.data && authRes.data.authenticated) {
-          // User is authenticated, show create offer button
           if (createOfferBtn) createOfferBtn.classList.remove('hidden');
         } else {
-          // User is not authenticated, hide create offer button
           if (createOfferBtn) createOfferBtn.classList.add('hidden');
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
-        // On error, hide button
         const createOfferBtn = document.getElementById('createOfferBtn');
         if (createOfferBtn) createOfferBtn.classList.add('hidden');
       }
     })();
 
-    // Client-side filtering and sorting for offers
     (function(){
       let offersCache = [];
       let currentSearchTerm = '';
-      const brandsMap = new Map(); // id -> name
-      let searchTimeout = null;
+      const brandsMap = new Map();
+      const modelsMap = new Map();
 
       function renderOffers(arr) {
         const list = document.getElementById('offersList');
@@ -137,7 +171,6 @@ include __DIR__ . '/_partials/head.php';
           const li = document.createElement('li');
           li.className = 'bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200';
           
-          // Image container
           const imgContainer = document.createElement('div');
           imgContainer.className = 'relative h-48 bg-gray-100';
           
@@ -157,7 +190,6 @@ include __DIR__ . '/_partials/head.php';
             imgContainer.appendChild(placeholder);
           }
           
-          // Content container
           const contentDiv = document.createElement('div');
           contentDiv.className = 'p-4';
           
@@ -202,44 +234,79 @@ include __DIR__ . '/_partials/head.php';
         });
       }
 
-      function applyFiltersAndSort() {
-        let filtered = offersCache.slice();
-
-        const brandId = document.getElementById('brandSelect').value;
-        const model = document.getElementById('modelSelect').value;
-        const fuel = document.getElementById('fuelSelect').value;
-        const transmission = document.getElementById('transmissionSelect').value;
-        const body = document.getElementById('bodySelect').value;
+      function buildFiltersUrl() {
+        const params = new URLSearchParams();
+        
+        if (currentSearchTerm) {
+          params.append('search', currentSearchTerm);
+        }
+        
         const sort = document.getElementById('sortSelect').value;
-
-        if (brandId) {
-          const brandName = brandsMap.get(brandId) || '';
-          filtered = filtered.filter(o => (o.brand_name || '') === brandName);
-        }
-        if (model) filtered = filtered.filter(o => (o.model_name || '') === model);
-        if (fuel) filtered = filtered.filter(o => (o.fuel_type || '') === fuel);
-        if (transmission) filtered = filtered.filter(o => (o.transmission || '') === transmission);
-        if (body) filtered = filtered.filter(o => (o.body_type || '') === body);
-
         if (sort) {
-          const [key, dir] = sort.split('_');
-          const multiplier = dir === 'asc' ? 1 : -1;
-          filtered.sort((a,b) => {
-            const aVal = Number(a[key] || 0);
-            const bVal = Number(b[key] || 0);
-            return (aVal - bVal) * multiplier;
-          });
+          const [sortBy, sortDir] = sort.split('_');
+          const sortFieldMap = {
+            'price': 'price',
+            'odometer': 'odometer',
+            'year': 'production_year'
+          };
+          if (sortFieldMap[sortBy]) {
+            params.append('sort_by', sortFieldMap[sortBy]);
+            params.append('sort_dir', sortDir);
+          }
+        } else {
+          params.append('sort_by', 'created_at');
+          params.append('sort_dir', 'DESC');
         }
-
-        renderOffers(filtered);
+        
+        const brandId = document.getElementById('brandSelect').value;
+        if (brandId) params.append('brand_id', brandId);
+        
+        const modelId = document.getElementById('modelSelect').value;
+        if (modelId) params.append('model_id', modelId);
+        
+        const fuel = document.getElementById('fuelSelect').value;
+        if (fuel) params.append('fuel_type', fuel);
+        
+        const transmission = document.getElementById('transmissionSelect').value;
+        if (transmission) params.append('transmission', transmission);
+        
+        const body = document.getElementById('bodySelect').value;
+        if (body) params.append('body_type', body);
+        
+        const priceMin = document.getElementById('priceMin').value;
+        if (priceMin) params.append('price_min', priceMin);
+        
+        const priceMax = document.getElementById('priceMax').value;
+        if (priceMax) params.append('price_max', priceMax);
+        
+        const yearMin = document.getElementById('yearMin').value;
+        if (yearMin) params.append('year_min', yearMin);
+        
+        const yearMax = document.getElementById('yearMax').value;
+        if (yearMax) params.append('year_max', yearMax);
+        
+        const odometerMin = document.getElementById('odometerMin').value;
+        if (odometerMin) params.append('odometer_min', odometerMin);
+        
+        const odometerMax = document.getElementById('odometerMax').value;
+        if (odometerMax) params.append('odometer_max', odometerMax);
+        
+        return params.toString();
       }
 
-      async function loadOffers(searchTerm = '') {
-        const searchUrl = searchTerm 
-          ? `/api/offers/search.php?search=${encodeURIComponent(searchTerm)}`
+      function applyFiltersAndSort() {
+        renderOffers(offersCache.slice());
+      }
+
+      async function loadOffersWithFilters() {
+        const queryString = buildFiltersUrl();
+        const url = queryString 
+          ? `/api/offers/search.php?${queryString}`
           : '/api/offers/search.php';
         
-        const offersRes = await apiFetch(searchUrl);
+        document.getElementById('offersList').innerHTML = '<li class="col-span-full bg-white border border-gray-200 p-8 rounded-xl text-center text-gray-500"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div><p>Ładowanie...</p></li>';
+        
+        const offersRes = await apiFetch(url);
         
         if (!offersRes.ok) {
           document.getElementById('offersList').innerHTML = `<li class="col-span-full bg-red-50 border border-red-200 p-4 rounded-xl text-center text-red-600">Błąd ładowania ofert: ${offersRes.error || ''}</li>`;
@@ -249,10 +316,10 @@ include __DIR__ . '/_partials/head.php';
         return Array.isArray(offersRes.data) ? offersRes.data : [];
       }
 
+
       async function loadInitial() {
-        // Fetch offers and value lists in parallel
         const [offersRes, brandsRes, fuelRes, transRes, bodyRes] = await Promise.all([
-          loadOffers(),
+          loadOffersWithFilters(),
           apiFetch('/api/vehicles/brands.php'),
           apiFetch('/api/values/fuelType.php'),
           apiFetch('/api/values/transmissionType.php'),
@@ -261,7 +328,6 @@ include __DIR__ . '/_partials/head.php';
 
         offersCache = offersRes;
 
-        // Populate brands
         if (brandsRes.ok && Array.isArray(brandsRes.data)) {
           const brandSelect = document.getElementById('brandSelect');
           brandsRes.data.forEach(b => {
@@ -273,7 +339,6 @@ include __DIR__ . '/_partials/head.php';
           });
         }
 
-        // Populate fuels
         if (fuelRes.ok && Array.isArray(fuelRes.data)) {
           const s = document.getElementById('fuelSelect');
           fuelRes.data.forEach(f => {
@@ -284,7 +349,6 @@ include __DIR__ . '/_partials/head.php';
           });
         }
 
-        // Populate transmissions
         if (transRes.ok && Array.isArray(transRes.data)) {
           const s = document.getElementById('transmissionSelect');
           transRes.data.forEach(t => {
@@ -295,7 +359,6 @@ include __DIR__ . '/_partials/head.php';
           });
         }
 
-        // Populate body types
         if (bodyRes.ok && Array.isArray(bodyRes.data)) {
           const s = document.getElementById('bodySelect');
           bodyRes.data.forEach(b => {
@@ -306,23 +369,32 @@ include __DIR__ . '/_partials/head.php';
           });
         }
 
-        // Wire brand -> models cascade
         document.getElementById('brandSelect').addEventListener('change', async function(){
           const brandId = this.value;
           const modelSelect = document.getElementById('modelSelect');
+          modelsMap.clear();
+          if (!brandId) {
+            modelSelect.innerHTML = '<option value="">-- wybierz markę --</option>';
+            modelSelect.disabled = true;
+            modelSelect.className = 'w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm cursor-not-allowed';
+            offersCache = await loadOffersWithFilters();
+            applyFiltersAndSort();
+            return;
+          }
+          modelSelect.disabled = false;
+          modelSelect.className = 'w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm';
           modelSelect.innerHTML = '<option value="">-- dowolny --</option>';
-          if (!brandId) return;
           const modelsRes = await apiFetch(`/api/vehicles/models.php?brand_id=${encodeURIComponent(brandId)}`);
           if (!modelsRes.ok) return;
           modelsRes.data.forEach(m => {
             const opt = document.createElement('option');
-            opt.value = m.name;
+            opt.value = String(m.id);
             opt.textContent = m.name;
             modelSelect.appendChild(opt);
+            modelsMap.set(m.name, String(m.id));
           });
         });
 
-        // Wire control buttons
         document.getElementById('filtersToggle').addEventListener('click', function(){
           const panel = document.getElementById('filtersPanel');
           const isVisible = !panel.classList.contains('hidden');
@@ -335,13 +407,27 @@ include __DIR__ . '/_partials/head.php';
           }
         });
 
-        document.getElementById('applyFilters').addEventListener('click', applyFiltersAndSort);
-        document.getElementById('clearFilters').addEventListener('click', function(){
+        async function applyFilters() {
+          offersCache = await loadOffersWithFilters();
+          applyFiltersAndSort();
+        }
+
+        document.getElementById('applyFilters').addEventListener('click', applyFilters);
+        document.getElementById('clearFilters').addEventListener('click', async function(){
           document.getElementById('brandSelect').value = '';
-          document.getElementById('modelSelect').innerHTML = '<option value="">-- dowolny --</option>';
+          const modelSelect = document.getElementById('modelSelect');
+          modelSelect.innerHTML = '<option value="">-- wybierz markę --</option>';
+          modelSelect.disabled = true;
+          modelSelect.className = 'w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm cursor-not-allowed';
           document.getElementById('fuelSelect').value = '';
           document.getElementById('transmissionSelect').value = '';
           document.getElementById('bodySelect').value = '';
+          document.getElementById('priceMin').value = '';
+          document.getElementById('priceMax').value = '';
+          document.getElementById('yearMin').value = '';
+          document.getElementById('yearMax').value = '';
+          document.getElementById('odometerMin').value = '';
+          document.getElementById('odometerMax').value = '';
           document.getElementById('sortSelect').value = '';
           
           // Also clear search if active
@@ -351,66 +437,64 @@ include __DIR__ . '/_partials/head.php';
             document.getElementById('clearSearch').classList.add('hidden');
           }
           
-          renderOffers(offersCache.slice());
+          modelsMap.clear();
+          offersCache = await loadOffersWithFilters();
+          applyFiltersAndSort();
         });
 
-        document.getElementById('sortSelect').addEventListener('change', applyFiltersAndSort);
+        document.getElementById('sortSelect').addEventListener('change', async function() {
+          offersCache = await loadOffersWithFilters();
+          applyFiltersAndSort();
+        });
 
         // Search functionality
         const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
         const clearSearchBtn = document.getElementById('clearSearch');
         
-        searchInput.addEventListener('input', function() {
-          const searchTerm = this.value.trim();
+        async function performSearch() {
+          const searchTerm = searchInput.value.trim();
           currentSearchTerm = searchTerm;
           
-          // Show/hide clear button
           if (searchTerm) {
             clearSearchBtn.classList.remove('hidden');
           } else {
             clearSearchBtn.classList.add('hidden');
           }
           
-          // Debounce search - wait 500ms after user stops typing
-          if (searchTimeout) {
-            clearTimeout(searchTimeout);
+          offersCache = await loadOffersWithFilters();
+          applyFiltersAndSort();
+        }
+        
+        searchButton.addEventListener('click', performSearch);
+        
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            performSearch();
           }
-          
-          searchTimeout = setTimeout(async () => {
-            // Show loading state
-            document.getElementById('offersList').innerHTML = '<li class="col-span-full bg-white border border-gray-200 p-8 rounded-xl text-center text-gray-500"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div><p>Wyszukiwanie...</p></li>';
-            
-            // Load offers with search
-            const offers = await loadOffers(searchTerm);
-            offersCache = offers;
-            
-            // Apply client-side filters and sort
-            applyFiltersAndSort();
-          }, 500);
         });
         
-        // Clear search
+        searchInput.addEventListener('input', function() {
+          const searchTerm = this.value.trim();
+          if (searchTerm) {
+            clearSearchBtn.classList.remove('hidden');
+          } else {
+            clearSearchBtn.classList.add('hidden');
+          }
+        });
+        
         clearSearchBtn.addEventListener('click', async function() {
           searchInput.value = '';
           currentSearchTerm = '';
           this.classList.add('hidden');
           
-          // Show loading state
-          document.getElementById('offersList').innerHTML = '<li class="col-span-full bg-white border border-gray-200 p-8 rounded-xl text-center text-gray-500"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div><p>Ładowanie...</p></li>';
-          
-          // Reload all offers
-          const offers = await loadOffers();
-          offersCache = offers;
-          
-          // Apply client-side filters and sort
+          offersCache = await loadOffersWithFilters();
           applyFiltersAndSort();
         });
 
-        // Initial render
         renderOffers(offersCache.slice());
       }
 
-      // Start
       loadInitial().catch(err => {
         document.getElementById('offersList').innerHTML = `<li class="col-span-full bg-red-50 border border-red-200 p-4 rounded-xl text-center text-red-600">Błąd inicjalizacji: ${err.message}</li>`;
       });

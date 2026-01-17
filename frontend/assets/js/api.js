@@ -65,27 +65,23 @@ function createTimeoutPromise(timeout) {
  * @returns {Promise<{ok: boolean, status: number, data: any, error: string}>}
  */
 async function apiFetch(path, opts = {}) {
-  // Normalize path - if path is already a full URL, use it; otherwise prepend baseURL
   let normalizedPath;
   if (path.startsWith('http://') || path.startsWith('https://')) {
     normalizedPath = path;
   } else if (path.startsWith('/api/')) {
-    // If path already starts with /api/, remove it and use baseURL (which already has /api)
-    normalizedPath = API_CONFIG.baseURL + path.substring(4); // Remove '/api' from start
+    normalizedPath = API_CONFIG.baseURL + path.substring(4);
   } else if (path.startsWith('/')) {
     normalizedPath = API_CONFIG.baseURL + path;
   } else {
     normalizedPath = `${API_CONFIG.baseURL}/${path}`;
   }
   
-  // Merge options
   const options = {
-    credentials: 'include', // Include cookies for cross-origin requests (frontend:80, backend:3000)
+    credentials: 'include',
     headers: {},
     ...opts,
   };
 
-  // Set Content-Type for JSON if body is an object (not FormData or URLSearchParams)
   if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData) && !(options.body instanceof URLSearchParams)) {
     options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(options.body);
@@ -105,7 +101,6 @@ async function apiFetch(path, opts = {}) {
       
       const res = await Promise.race([fetchPromise, timeoutPromise]);
       
-      // Determine content type and parse response
       const contentType = res.headers.get('Content-Type') || '';
       let data = null;
       
@@ -115,11 +110,9 @@ async function apiFetch(path, opts = {}) {
         } else if (contentType.startsWith('text/')) {
           data = await res.text();
         } else {
-          // For binary content (images, etc.), return blob
           data = await res.blob();
         }
       } catch (parseError) {
-        // If parsing fails, try to get text
         try {
           data = await res.text();
         } catch {
@@ -127,11 +120,9 @@ async function apiFetch(path, opts = {}) {
         }
       }
 
-      // Handle error responses
       if (!res.ok) {
         const errorMessage = getErrorMessage(data, getStatusErrorMessage(res.status));
         
-        // Don't retry on client errors (4xx) except 408, 429
         if (res.status >= 400 && res.status < 500 && ![408, 429].includes(res.status)) {
           return {
             ok: false,
@@ -141,7 +132,6 @@ async function apiFetch(path, opts = {}) {
           };
         }
         
-        // Retry on server errors (5xx) or specific client errors
         lastError = {
           ok: false,
           status: res.status,
@@ -149,17 +139,14 @@ async function apiFetch(path, opts = {}) {
           data: data,
         };
         
-        // If this was the last attempt, return error
         if (attempts >= maxAttempts) {
           return lastError;
         }
         
-        // Wait before retry
         await new Promise(resolve => setTimeout(resolve, API_CONFIG.retryDelay * attempts));
         continue;
       }
 
-      // Success response
       return {
         ok: true,
         status: res.status,
@@ -173,12 +160,10 @@ async function apiFetch(path, opts = {}) {
         error: err.message || 'Błąd połączenia z serwerem',
       };
       
-      // Don't retry on timeout or network errors if it's the last attempt
       if (attempts >= maxAttempts) {
         return lastError;
       }
       
-      // Wait before retry
       await new Promise(resolve => setTimeout(resolve, API_CONFIG.retryDelay * attempts));
     }
   }
@@ -220,16 +205,12 @@ apiFetch.delete = function(path, opts = {}) {
  * @returns {string} Full URL to attachment
  */
 function getAttachmentUrl(attachmentId) {
-  // Attachments are served directly from backend API
-  // API_CONFIG.baseURL is 'http://localhost:3000/api', so we need to use it directly
   return `${API_CONFIG.baseURL}/attachments/show.php?id=${encodeURIComponent(attachmentId)}`;
 }
 
-// Export for inline scripts
 window.apiFetch = apiFetch;
 window.getAttachmentUrl = getAttachmentUrl;
 
-// Also export for potential module usage
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = apiFetch;
 }
