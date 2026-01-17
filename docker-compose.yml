@@ -45,6 +45,27 @@ services:
       - public
     depends_on:
       - db
+  frontend:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.frontend
+    platform: linux/amd64
+    environment:
+      LANG: pl_PL.UTF-8
+      LANGUAGE: pl_PL.UTF-8
+      LC_ALL: pl_PL.UTF-8
+      TZ: "Europe/Warsaw"
+    volumes:
+      - ./frontend:/var/www/html
+      - .env:/var/www/html/.env:ro
+    command: docker-php-entrypoint apache2-foreground
+    ports:
+      - "80:80"
+    networks:
+      - public
+      - private
+    depends_on:
+      - backend
 
 volumes:
   db_data:

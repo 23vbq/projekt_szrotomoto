@@ -31,22 +31,22 @@ if (isset($_FILES['files']) && !empty($_FILES['files']['name'])) {
 
 $modelId = isset($_POST['model_id']) ? $_POST['model_id'] : null;
 $title = isset($_POST['title']) ? trim($_POST['title']) : null;
-$description = isset($_POST['description']) ? trim($_POST['description']) : 'NULL';
+$description = isset($_POST['description']) && trim($_POST['description']) !== '' ? trim($_POST['description']) : null;
 $price = isset($_POST['price']) ? $_POST['price'] : null;
 $productionYear = isset($_POST['production_year']) ? $_POST['production_year'] : null;
 $odometer = isset($_POST['odometer']) ? $_POST['odometer'] : null;
 $fuelType = isset($_POST['fuel_type']) ? $_POST['fuel_type'] : null;
 $transmission = isset($_POST['transmission']) ?  $_POST['transmission'] : null;
-$color = isset($_POST['color']) ? trim($_POST['color']) : 'NULL';
-$displacement = isset($_POST['displacement']) ? $_POST['displacement'] : 'NULL';
-$horsepower = isset($_POST['horsepower']) ? $_POST['horsepower'] : 'NULL';
-$torque = isset($_POST['torque']) ? $_POST['torque'] : 'NULL';
+$color = isset($_POST['color']) && trim($_POST['color']) !== '' ? trim($_POST['color']) : null;
+$displacement = isset($_POST['displacement']) && $_POST['displacement'] !== '' ? $_POST['displacement'] : null;
+$horsepower = isset($_POST['horsepower']) && $_POST['horsepower'] !== '' ? $_POST['horsepower'] : null;
+$torque = isset($_POST['torque']) && $_POST['torque'] !== '' ? $_POST['torque'] : null;
 $bodyType = isset($_POST['body_type']) ? $_POST['body_type'] : null;
-$doorsAmount = isset($_POST['doors_amount']) ? $_POST['doors_amount'] : 'NULL';
-$seatsAmount = isset($_POST['seats_amount']) ? $_POST['seats_amount'] : 'NULL';
+$doorsAmount = isset($_POST['doors_amount']) && $_POST['doors_amount'] !== '' ? $_POST['doors_amount'] : null;
+$seatsAmount = isset($_POST['seats_amount']) && $_POST['seats_amount'] !== '' ? $_POST['seats_amount'] : null;
 $vin = isset($_POST['vin']) ? trim($_POST['vin']) : null;
-$registrationNumber = isset($_POST['registration_number']) ? trim($_POST['registration_number']) : 'NULL';
-$countryOfOrigin = isset($_POST['country_of_origin']) ? $_POST['country_of_origin'] : 'NULL';
+$registrationNumber = isset($_POST['registration_number']) && trim($_POST['registration_number']) !== '' ? trim($_POST['registration_number']) : null;
+$countryOfOrigin = isset($_POST['country_of_origin']) && $_POST['country_of_origin'] !== '' ? $_POST['country_of_origin'] : null;
 $isAccidentFree = isset($_POST['is_accident_free']) ? $_POST['is_accident_free'] == '1' : false;
 $isFirstHand = isset($_POST['is_first_hand']) ? $_POST['is_first_hand'] == '1' : false;
 $isUsed = isset($_POST['is_used']) ? $_POST['is_used'] == '1' : false;
@@ -78,7 +78,7 @@ if ($fuelType === null || $transmission === null || $bodyType === null) {
     exit;
 }
 
-if ($vin !== 'NULL') {
+if ($vin !== null) {
     $stmt = Database::getPdo()->prepare('SELECT id FROM offers WHERE vin = :vin');
     $stmt->execute([':vin' => $vin]);
     if ($stmt->fetch()) {
