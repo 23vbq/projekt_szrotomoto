@@ -1,0 +1,19 @@
+FROM php:8.4-apache
+
+# Lokalizacja i język
+RUN apt-get update && apt-get install -y locales && \
+    echo "pl_PL.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen pl_PL.UTF-8
+ENV LANG=pl_PL.UTF-8
+ENV LANGUAGE=pl_PL:pl
+ENV LC_ALL=pl_PL.UTF-8
+
+# Strefa czasowa
+ENV TZ=Europe/Warsaw
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+WORKDIR /var/www/html
+
+COPY frontend /var/www/html/
+
+CMD [ "docker-php-entrypoint apache2-foreground" ]
