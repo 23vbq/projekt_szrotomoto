@@ -1,35 +1,55 @@
 <?php
 
 class Database{
-    private const HOST = 'db';
-    private const PORT = 3307;
-    private const NAME = 'szrotomoto';
-    private const USER = 'appuser';
-    private const PASSWORD = 'apppass';
+    private static ?string $DB_HOST = null;
+    private static ?int $DB_PORT = null;
+    private static ?string $DB_NAME = null;
+    private static ?string $DB_USER = null;
+    private static ?string $DB_PASSWORD = null;
 
-    private string $dsn = "mysql:host=".self::HOST.";port=".self::PORT.";dbname=".self::NAME.";charset=utf8";
-    private ?PDO $pdo;
+    private static ?PDO $pdo = null;
 
-    public function __construct()
+    private static function initConfig()
     {
-        $this->connect();
+        self::$DB_HOST = Env::get('DB_HOST');
+        self::$DB_PORT = (int) Env::get('DB_PORT');
+        self::$DB_NAME = Env::get('DB_NAME');
+        self::$DB_USER = Env::get('DB_USER');
+        self::$DB_PASSWORD = Env::get('DB_PASSWORD');
     }
 
-    private function connect()
+    private static function getDsn(): string
     {
-        $this->pdo = new PDO($this->dsn, self::USER, self::PASSWORD, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
-        ]);
+        return "mysql:host=".self::$DB_HOST.";port=".self::$DB_PORT.";dbname=".self::$DB_NAME.";charset=utf8";
     }
 
-    public function getPdo()
+    public static function connect()
     {
-        if (!$this->pdo) {
-            $this->connect();
+        if (
+            self::$DB_HOST === null
+            || self::$DB_PORT === null
+            || self::$DB_NAME === null
+            || self::$DB_USER === null
+            || self::$DB_PASSWORD === null
+        ) {
+            self::initConfig();
         }
 
-        return $this->pdo;
+        if (self::$pdo === null) {
+            self::$pdo = new PDO(self::getDsn(), self::$DB_USER, self::$DB_PASSWORD, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false
+            ]);
+        }
+    }
+
+    public static function getPdo(): PDO
+    {
+        if (self::$pdo === null) {
+            self::connect();
+        }
+
+        return self::$pdo;
     }
 }

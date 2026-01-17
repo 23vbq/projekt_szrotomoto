@@ -1,0 +1,689 @@
+{
+	"info": {
+		"_postman_id": "6828eee9-9eac-4312-ad8d-bc84edbe64b5",
+		"name": "projekt_szrotomoto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29255098"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "repeated_password",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/login/register.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"login",
+								"register.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/login/login.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"login",
+								"login.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/login/logout.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"login",
+								"logout.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "Brands",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/vehicles/brands.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"brands.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Models",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/vehicles/models.php?brand_id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"vehicles",
+								"models.php"
+							],
+							"query": [
+								{
+									"key": "brand_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Values",
+			"item": [
+				{
+					"name": "Fuel Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/fuelType.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"fuelType.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transmission Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/transmissionType.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"transmissionType.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Body Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/bodyType.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"bodyType.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Countries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/values/countries.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"values",
+								"countries.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Offers",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/offers/search.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"search.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "model_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "production_year",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "odometer",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "fuel_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "transmission",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "color",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "displacement",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "horsepower",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "torque",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "body_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "doors_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "seats_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "registration_number",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "country_of_origin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_accident_free",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_first_hand",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_used",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_warranty",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_service_book",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/offers/create.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"create.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "model_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "production_year",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "odometer",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "fuel_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "transmission",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "color",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "displacement",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "horsepower",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "torque",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "body_type",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "doors_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "seats_amount",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "registration_number",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "country_of_origin",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_accident_free",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_first_hand",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "is_used",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_warranty",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "has_service_book",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/offers/show.php?offer_id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"show.php"
+							],
+							"query": [
+								{
+									"key": "offer_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set as Sold",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/offers/setAsSold.php?offer_id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"offers",
+								"setAsSold.php"
+							],
+							"query": [
+								{
+									"key": "offer_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Attachments",
+			"item": [
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ADDR}}/api/attachments/show.php?id",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"attachments",
+								"show.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ADDR}}/api/attachments/create.php",
+							"host": [
+								"{{ADDR}}"
+							],
+							"path": [
+								"api",
+								"attachments",
+								"create.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ADDR}}/api/status.php",
+					"host": [
+						"{{ADDR}}"
+					],
+					"path": [
+						"api",
+						"status.php"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ADDR",
+			"value": "localhost:3000",
+			"type": "string"
+		}
+	]
+}

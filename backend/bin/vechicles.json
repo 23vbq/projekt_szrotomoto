@@ -1,0 +1,107 @@
+{
+    "BMW": [
+        "Seria 1",
+        "Seria 2",
+        "Seria 3",
+        "Seria 4",
+        "Seria 5",
+        "Seria 6",
+        "Seria 7",
+        "X1",
+        "X3",
+        "X5",
+        "X7"
+    ],
+    "Audi": [
+        "A1",
+        "A3",
+        "A4",
+        "A6",
+        "A8",
+        "Q3",
+        "Q5",
+        "Q7"
+    ],
+    "Mercedes-Benz": [
+        "Klasa A",
+        "Klasa C",
+        "Klasa E",
+        "Klasa S",
+        "CLA",
+        "GLC",
+        "GLE",
+        "GLS"
+    ],
+    "Volkswagen": [
+        "Golf",
+        "Passat",
+        "Tiguan",
+        "Polo",
+        "T-Roc",
+        "Arteon",
+        "Touareg"
+    ],
+    "Toyota": [
+        "Yaris",
+        "Corolla",
+        "Camry",
+        "RAV4",
+        "C-HR",
+        "Avensis",
+        "Hilux",
+        "Prius"
+    ],
+    "Skoda": [
+        "Fabia",
+        "Octavia",
+        "Superb",
+        "Karoq",
+        "Kodiaq",
+        "Scala",
+        "Enyaq"
+    ],
+    "Opel": [
+        "Corsa",
+        "Astra",
+        "Insignia",
+        "Mokka",
+        "Grandland",
+        "Zafira",
+        "Combo"
+    ],
+    "Ford": [
+        "Fiesta",
+        "Focus",
+        "Mondeo",
+        "Kuga",
+        "Puma"
+    ],
+    "Renault": [
+        "Clio",
+        "Megane",
+        "Scenic",
+        "Captur",
+        "Austral"
+    ],
+    "Peugeot": [
+        "208",
+        "308",
+        "508",
+        "3008",
+        "5008"
+    ],
+    "Kia": [
+        "Rio",
+        "Ceed",
+        "Sportage",
+        "Stonic",
+        "Sorento"
+    ],
+    "Hyundai": [
+        "i20",
+        "i30",
+        "Tucson",
+        "Santa Fe",
+        "Kona"
+    ]
+}
