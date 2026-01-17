@@ -24,15 +24,21 @@ $qb = (new QueryBuilder(Database::getPdo()))
     ->setParameter(':status', Consts::OFFER_STATUS_ACTIVE);
 
 if (!empty($search)) {
+    $searchTerm = '%' . $search . '%';
     $qb->andWhere('(
-        o.title LIKE :search 
-        OR o.description LIKE :search 
-        OR b.name LIKE :search 
-        OR m.name LIKE :search 
-        OR o.vin LIKE :search 
-        OR o.registration_number LIKE :search
+        o.title LIKE :search_title 
+        OR o.description LIKE :search_description 
+        OR b.name LIKE :search_brand 
+        OR m.name LIKE :search_model 
+        OR o.vin LIKE :search_vin 
+        OR o.registration_number LIKE :search_registration
     )')
-    ->setParameter(':search', '%' . $search . '%');
+    ->setParameter(':search_title', $searchTerm)
+    ->setParameter(':search_description', $searchTerm)
+    ->setParameter(':search_brand', $searchTerm)
+    ->setParameter(':search_model', $searchTerm)
+    ->setParameter(':search_vin', $searchTerm)
+    ->setParameter(':search_registration', $searchTerm);
 }
 
 $qb->addOrderBy('created_at', 'DESC');
