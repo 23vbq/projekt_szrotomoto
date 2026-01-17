@@ -4,15 +4,21 @@ class Env {
 
     public static function load()
     {
-        if (!file_exists(__DIR__ . '/../.env')) {
-            throw new RuntimeException('.env file not found');
+        $envPath = __DIR__ . '/../.env';
+        
+        if (!file_exists($envPath)) {
+            throw new RuntimeException('.env file not found at: ' . $envPath);
         }
 
-        self::$variables = parse_ini_file(__DIR__ . '/../.env');
+        $variables = parse_ini_file($envPath);
 
-        if (self::$variables === false) {
-            throw new RuntimeException('Failed to load .env file');
+        if ($variables === false) {
+            $error = error_get_last();
+            $errorMsg = $error ? $error['message'] : 'Unknown error';
+            throw new RuntimeException('Failed to load .env file: ' . $errorMsg);
         }
+
+        self::$variables = $variables;
     }
 
     public static function get(string $key)

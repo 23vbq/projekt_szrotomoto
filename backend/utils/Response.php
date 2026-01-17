@@ -65,9 +65,14 @@ class Response {
     public const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;
 
     public static function json($data, int $statusCode = self::HTTP_OK): void {
+        // Clear any previous output
+        if (ob_get_level()) {
+            ob_clean();
+        }
+        
         http_response_code($statusCode);
         header('Content-Type: application/json; charset=utf-8');
-        echo json_encode($data);
+        echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
 

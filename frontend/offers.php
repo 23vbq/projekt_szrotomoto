@@ -1,75 +1,75 @@
 <?php
+$pageTitle = 'Oferty - Szrotomoto';
+include __DIR__ . '/_partials/head.php';
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Offers - Szrotomoto</title>
-  <link rel="stylesheet" href="/public/assets/css/style.css">
-  <script src="/public/assets/js/api.js"></script>
-</head>
-<body>
-  <?php include __DIR__ . '/_nav.php'; ?>
-  <main class="container">
-    <h1>Offers</h1>
+  <?php include __DIR__ . '/_partials/nav.php'; ?>
+  <main class="max-w-6xl mx-auto my-8 px-4 sm:px-6 lg:px-8">
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-slate-900 mb-2">Oferty pojazdów</h1>
+      <p class="text-gray-600">Znajdź swój wymarzony pojazd</p>
+    </div>
     
-    <p><a href="/public/offers_create.php">Create new offer</a></p>
+    <div class="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <a href="/offers_create.php" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg no-underline">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Dodaj nową ofertę
+      </a>
 
-    <div class="offers-controls" style="margin:14px 0; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-      <div>
-        <label for="sortSelect">Sort</label>
-        <select id="sortSelect">
-          <option value="">-- no sorting --</option>
-          <option value="price_asc">Price: low → high</option>
-          <option value="price_desc">Price: high → low</option>
-          <option value="odometer_asc">Mileage: low → high</option>
-          <option value="odometer_desc">Mileage: high → low</option>
-          <option value="year_asc">Production year: low → high</option>
-          <option value="year_desc">Production year: high → low</option>
-        </select>
-      </div>
-
-      <div>
-        <button id="filtersToggle" class="secondary">Filters ▾</button>
-      </div>
-
-      <div id="filtersPanel" style="display:none; background:var(--card); padding:12px; border:1px solid #eef2f6; border-radius:8px;">
-        <div style="display:flex; gap:10px; align-items:end; flex-wrap:wrap; max-width:760px">
-          <div style="min-width:160px">
-            <label for="brandSelect">Brand</label>
-            <select id="brandSelect"><option value="">-- any --</option></select>
-          </div>
-          <div style="min-width:160px">
-            <label for="modelSelect">Model</label>
-            <select id="modelSelect"><option value="">-- any --</option></select>
-          </div>
-          <div style="min-width:160px">
-            <label for="fuelSelect">Fuel</label>
-            <select id="fuelSelect"><option value="">-- any --</option></select>
-          </div>
-          <div style="min-width:160px">
-            <label for="transmissionSelect">Transmission</label>
-            <select id="transmissionSelect"><option value="">-- any --</option></select>
-          </div>
-          <div style="min-width:160px">
-            <label for="bodySelect">Body type</label>
-            <select id="bodySelect"><option value="">-- any --</option></select>
-          </div>
+      <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex items-center gap-2">
+          <label for="sortSelect" class="text-sm font-medium text-gray-700 whitespace-nowrap">Sortuj:</label>
+          <select id="sortSelect" class="px-4 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+            <option value="">-- bez sortowania --</option>
+            <option value="price_asc">Cena: od najniższej</option>
+            <option value="price_desc">Cena: od najwyższej</option>
+            <option value="odometer_asc">Przebieg: od najniższego</option>
+            <option value="odometer_desc">Przebieg: od najwyższego</option>
+            <option value="year_asc">Rok produkcji: od najstarszego</option>
+            <option value="year_desc">Rok produkcji: od najnowszego</option>
+          </select>
         </div>
-        <div style="margin-top:8px; display:flex; gap:8px;">
-          <button id="applyFilters" class="primary">Apply</button>
-          <button id="clearFilters" class="secondary">Clear</button>
+
+        <button id="filtersToggle" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-sm">
+          Filtry ▾
+        </button>
+      </div>
+    </div>
+
+    <div id="filtersPanel" class="hidden mb-6 bg-white p-5 border border-gray-200 rounded-xl shadow-sm">
+      <h3 class="text-lg font-semibold text-slate-900 mb-4">Filtry wyszukiwania</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div>
+          <label for="brandSelect" class="block mb-2 text-sm font-medium text-gray-700">Marka</label>
+          <select id="brandSelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolna --</option></select>
+        </div>
+        <div>
+          <label for="modelSelect" class="block mb-2 text-sm font-medium text-gray-700">Model</label>
+          <select id="modelSelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolny --</option></select>
+        </div>
+        <div>
+          <label for="fuelSelect" class="block mb-2 text-sm font-medium text-gray-700">Paliwo</label>
+          <select id="fuelSelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolne --</option></select>
+        </div>
+        <div>
+          <label for="transmissionSelect" class="block mb-2 text-sm font-medium text-gray-700">Skrzynia biegów</label>
+          <select id="transmissionSelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolna --</option></select>
+        </div>
+        <div>
+          <label for="bodySelect" class="block mb-2 text-sm font-medium text-gray-700">Typ nadwozia</label>
+          <select id="bodySelect" class="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"><option value="">-- dowolny --</option></select>
         </div>
       </div>
-
+      <div class="mt-4 flex gap-3">
+        <button id="applyFilters" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">Zastosuj</button>
+        <button id="clearFilters" class="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">Wyczyść</button>
+      </div>
     </div>
 
     <section id="offersContainer">
-      <ul id="offersList"></ul>
+      <ul id="offersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></ul>
     </section>
-
-  <p><a href="/public/offers.php">Back</a></p>
   </main>
 
   <script>
@@ -82,35 +82,75 @@
         const list = document.getElementById('offersList');
         list.innerHTML = '';
         if (!Array.isArray(arr) || arr.length === 0) {
-          list.innerHTML = '<li>No offers found</li>';
+          list.innerHTML = '<li class="col-span-full bg-white border border-gray-200 p-8 rounded-xl text-center text-gray-500"><p class="text-lg">Nie znaleziono ofert</p><p class="text-sm mt-2">Spróbuj zmienić filtry wyszukiwania</p></li>';
           return;
         }
 
         arr.forEach(o => {
           const li = document.createElement('li');
-          li.className = 'offer-card';
-          const a = document.createElement('a');
-          a.href = `/public/offer.php?offer_id=${encodeURIComponent(o.id)}`;
-          a.textContent = o.title + ' — ' + (o.brand_name || '') + ' ' + (o.model_name || '');
-          a.style.fontWeight = '600';
-          li.appendChild(a);
-          const meta = document.createElement('div');
-          meta.className = 'muted';
-          meta.textContent = `${o.production_year || ''} • ${o.odometer || ''} km • ${o.price || ''} PLN`;
-          li.appendChild(meta);
-
+          li.className = 'bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200';
+          
+          // Image container
+          const imgContainer = document.createElement('div');
+          imgContainer.className = 'relative h-48 bg-gray-100';
+          
           if (o.attachment_id) {
+            const imgLink = document.createElement('a');
+            imgLink.href = `/offer.php?offer_id=${encodeURIComponent(o.id)}`;
             const img = document.createElement('img');
             img.src = `/api/attachments/show.php?id=${encodeURIComponent(o.attachment_id)}`;
-            img.alt = o.title || 'attachment';
-            img.className = 'offer-thumb';
-            // wrap image with link to detail page
-            const imgLink = document.createElement('a');
-            imgLink.href = `/public/offer.php?offer_id=${encodeURIComponent(o.id)}`;
+            img.alt = o.title || 'Zdjęcie pojazdu';
+            img.className = 'w-full h-full object-cover';
             imgLink.appendChild(img);
-            li.appendChild(imgLink);
+            imgContainer.appendChild(imgLink);
+          } else {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'w-full h-full flex items-center justify-center text-gray-400';
+            placeholder.innerHTML = '<svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>';
+            imgContainer.appendChild(placeholder);
           }
-
+          
+          // Content container
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'p-4';
+          
+          const a = document.createElement('a');
+          a.href = `/offer.php?offer_id=${encodeURIComponent(o.id)}`;
+          a.className = 'block mb-2';
+          const title = document.createElement('h3');
+          title.className = 'text-lg font-bold text-slate-900 hover:text-blue-600 transition-colors line-clamp-2';
+          title.textContent = o.title || 'Bez tytułu';
+          a.appendChild(title);
+          
+          const brandModel = document.createElement('p');
+          brandModel.className = 'text-sm text-gray-600 mb-2';
+          brandModel.textContent = (o.brand_name || '') + ' ' + (o.model_name || '');
+          a.appendChild(brandModel);
+          contentDiv.appendChild(a);
+          
+          const meta = document.createElement('div');
+          meta.className = 'flex flex-wrap gap-2 text-sm text-gray-500 mb-3';
+          if (o.production_year) {
+            const year = document.createElement('span');
+            year.className = 'px-2 py-1 bg-gray-100 rounded';
+            year.textContent = o.production_year;
+            meta.appendChild(year);
+          }
+          if (o.odometer) {
+            const km = document.createElement('span');
+            km.className = 'px-2 py-1 bg-gray-100 rounded';
+            km.textContent = o.odometer.toLocaleString('pl-PL') + ' km';
+            meta.appendChild(km);
+          }
+          contentDiv.appendChild(meta);
+          
+          const price = document.createElement('div');
+          price.className = 'text-2xl font-bold text-blue-600';
+          price.textContent = (o.price || 0).toLocaleString('pl-PL') + ' PLN';
+          contentDiv.appendChild(price);
+          
+          li.appendChild(imgContainer);
+          li.appendChild(contentDiv);
           list.appendChild(li);
         });
       }
@@ -157,7 +197,10 @@
           apiFetch('/api/values/bodyType.php')
         ]);
 
-        if (!offersRes.ok) return document.getElementById('offersList').innerHTML = `<li>Error loading offers: ${offersRes.error || ''}</li>`;
+        if (!offersRes.ok) {
+          document.getElementById('offersList').innerHTML = `<li class="col-span-full bg-red-50 border border-red-200 p-4 rounded-xl text-center text-red-600">Błąd ładowania ofert: ${offersRes.error || ''}</li>`;
+          return;
+        }
         offersCache = Array.isArray(offersRes.data) ? offersRes.data : [];
 
         // Populate brands
@@ -209,7 +252,7 @@
         document.getElementById('brandSelect').addEventListener('change', async function(){
           const brandId = this.value;
           const modelSelect = document.getElementById('modelSelect');
-          modelSelect.innerHTML = '<option value="">-- any --</option>';
+          modelSelect.innerHTML = '<option value="">-- dowolny --</option>';
           if (!brandId) return;
           const modelsRes = await apiFetch(`/api/vehicles/models.php?brand_id=${encodeURIComponent(brandId)}`);
           if (!modelsRes.ok) return;
@@ -224,15 +267,20 @@
         // Wire control buttons
         document.getElementById('filtersToggle').addEventListener('click', function(){
           const panel = document.getElementById('filtersPanel');
-          const visible = panel.style.display !== 'none';
-          panel.style.display = visible ? 'none' : 'block';
-          this.textContent = visible ? 'Filters ▾' : 'Filters ▴';
+          const isVisible = !panel.classList.contains('hidden');
+          if (isVisible) {
+            panel.classList.add('hidden');
+            this.textContent = 'Filtry ▾';
+          } else {
+            panel.classList.remove('hidden');
+            this.textContent = 'Filtry ▴';
+          }
         });
 
         document.getElementById('applyFilters').addEventListener('click', applyFiltersAndSort);
         document.getElementById('clearFilters').addEventListener('click', function(){
           document.getElementById('brandSelect').value = '';
-          document.getElementById('modelSelect').innerHTML = '<option value="">-- any --</option>';
+          document.getElementById('modelSelect').innerHTML = '<option value="">-- dowolny --</option>';
           document.getElementById('fuelSelect').value = '';
           document.getElementById('transmissionSelect').value = '';
           document.getElementById('bodySelect').value = '';
@@ -248,7 +296,7 @@
 
       // Start
       loadInitial().catch(err => {
-        document.getElementById('offersList').innerHTML = `<li>Error initializing offers: ${err.message}</li>`;
+        document.getElementById('offersList').innerHTML = `<li class="col-span-full bg-red-50 border border-red-200 p-4 rounded-xl text-center text-red-600">Błąd inicjalizacji: ${err.message}</li>`;
       });
     })();
   </script>

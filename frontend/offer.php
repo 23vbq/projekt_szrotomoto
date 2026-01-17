@@ -1,25 +1,44 @@
 <?php
+$pageTitle = 'Oferta - Szrotomoto';
+include __DIR__ . '/_partials/head.php';
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Offer - Szrotomoto</title>
-  <link rel="stylesheet" href="/public/assets/css/style.css">
-  <script src="/public/assets/js/api.js"></script>
-</head>
-<body>
-  <?php include __DIR__ . '/_nav.php'; ?>
-  <main class="container">
-    <h1 id="title">Offer</h1>
-    <div id="meta"></div>
-    <div id="gallery"></div>
-    <section id="details"></section>
+  <?php include __DIR__ . '/_partials/nav.php'; ?>
+  <main class="max-w-5xl mx-auto my-8 px-4 sm:px-6 lg:px-8">
+    <div id="loading" class="text-center py-12">
+      <p class="text-gray-500">Ładowanie oferty...</p>
+    </div>
 
-    <div id="actions"></div>
+    <div id="offerContent" class="hidden">
+      <div class="mb-6">
+        <a href="/offers.php" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-4 no-underline">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Powrót do ofert
+        </a>
+        <h1 id="title" class="text-3xl font-bold text-slate-900 mb-2"></h1>
+        <div id="meta" class="text-lg text-gray-600 mb-4"></div>
+      </div>
 
-    <p><a href="/public/offers.php">Back to offers</a></p>
+      <div id="gallery" class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2">
+          <section id="details" class="bg-white border border-gray-200 p-6 rounded-xl shadow-sm"></section>
+        </div>
+        
+        <div class="lg:col-span-1">
+          <div class="bg-white border border-gray-200 p-6 rounded-xl shadow-sm sticky top-24">
+            <div id="priceSection" class="mb-4"></div>
+            <div id="actions" class="flex flex-col gap-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="error" class="hidden bg-red-50 border border-red-200 p-6 rounded-xl text-red-600 text-center">
+      <p id="errorMessage"></p>
+    </div>
   </main>
 
   <script>
@@ -31,90 +50,120 @@
     async function loadOffer() {
       const id = qs('offer_id');
       if (!id) {
-        document.getElementById('details').textContent = 'No offer_id provided in query string';
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error').classList.remove('hidden');
+        document.getElementById('errorMessage').textContent = 'Brak ID oferty w parametrach';
         return;
       }
 
       const res = await apiFetch(`/api/offers/show.php?offer_id=${encodeURIComponent(id)}`);
       if (!res.ok) {
-        document.getElementById('details').textContent = res.error || 'Failed to load offer';
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error').classList.remove('hidden');
+        document.getElementById('errorMessage').textContent = res.error || 'Nie udało się załadować oferty';
         return;
       }
 
       const o = res.data;
-      document.getElementById('title').textContent = o.title || 'Offer';
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('offerContent').classList.remove('hidden');
+      
+      document.getElementById('title').textContent = o.title || 'Oferta';
+      document.getElementById('meta').textContent = `${o.brand_name || ''} ${o.model_name || ''} • ${o.production_year || ''} rok`;
 
-      const meta = document.getElementById('meta');
-      meta.textContent = `${o.brand_name || ''} ${o.model_name || ''} — ${o.production_year || ''} • ${o.price || ''} PLN`;
-
+      // Gallery
       const gallery = document.getElementById('gallery');
       gallery.innerHTML = '';
       try {
         const attachments = o.attachments ? JSON.parse(o.attachments) : null;
-        if (Array.isArray(attachments)) {
+        if (Array.isArray(attachments) && attachments.length > 0) {
           attachments.forEach(id => {
             const img = document.createElement('img');
             img.src = `/api/attachments/show.php?id=${encodeURIComponent(id)}`;
-            img.alt = o.title || 'attachment';
-            img.style.maxWidth = '300px';
-            img.style.marginRight = '8px';
+            img.alt = o.title || 'Zdjęcie pojazdu';
+            img.className = 'w-full h-64 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer';
+            img.onclick = () => window.open(img.src, '_blank');
             gallery.appendChild(img);
           });
+        } else {
+          gallery.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><p>Brak zdjęć</p></div>';
         }
       } catch (e) {
-        // attachments may be null or not JSON — ignore
+        gallery.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400">Brak zdjęć</div>';
       }
 
+      // Details
       const details = document.getElementById('details');
-      details.innerHTML = '';
+      details.innerHTML = '<h2 class="text-xl font-bold text-slate-900 mb-4">Szczegóły oferty</h2>';
+      
       const fields = [
-        ['Description', 'description'],
-        ['Odometer', 'odometer'],
-        ['Fuel', 'fuel_type'],
-        ['Transmission', 'transmission'],
-        ['Displacement', 'displacement'],
-        ['Horsepower', 'horsepower'],
-        ['Body type', 'body_type'],
-        ['Doors', 'doors_amount'],
-        ['Seats', 'seats_amount'],
+        ['Opis', 'description'],
+        ['Przebieg', 'odometer', ' km'],
+        ['Paliwo', 'fuel_type'],
+        ['Skrzynia biegów', 'transmission'],
+        ['Pojemność', 'displacement', ' cm³'],
+        ['Moc', 'horsepower', ' KM'],
+        ['Typ nadwozia', 'body_type'],
+        ['Liczba drzwi', 'doors_amount'],
+        ['Liczba miejsc', 'seats_amount'],
         ['VIN', 'vin'],
-        ['Registration', 'registration_number'],
-        ['Country', 'country_of_origin'],
-        ['Seller', 'user_name']
+        ['Numer rejestracyjny', 'registration_number'],
+        ['Kraj pochodzenia', 'country_of_origin'],
+        ['Sprzedawca', 'user_name']
       ];
 
-      fields.forEach(([label, key]) => {
-        const div = document.createElement('div');
-        div.innerHTML = `<strong>${label}:</strong> ${o[key] !== null && o[key] !== undefined ? o[key] : ''}`;
-        details.appendChild(div);
+      fields.forEach(([label, key, suffix = '']) => {
+        if (o[key] !== null && o[key] !== undefined && o[key] !== '') {
+          const div = document.createElement('div');
+          div.className = 'mb-4 pb-4 border-b border-gray-100 last:border-0';
+          const labelEl = document.createElement('div');
+          labelEl.className = 'text-sm font-medium text-gray-500 mb-1';
+          labelEl.textContent = label;
+          const valueEl = document.createElement('div');
+          valueEl.className = 'text-base text-slate-900 font-medium';
+          valueEl.textContent = o[key] + suffix;
+          div.appendChild(labelEl);
+          div.appendChild(valueEl);
+          details.appendChild(div);
+        }
       });
 
+      // Price section
+      const priceSection = document.getElementById('priceSection');
+      priceSection.innerHTML = `
+        <div class="text-3xl font-bold text-blue-600 mb-2">${(o.price || 0).toLocaleString('pl-PL')} PLN</div>
+        <div class="text-sm text-gray-500">Cena</div>
+      `;
+
+      // Actions
       const actions = document.getElementById('actions');
       actions.innerHTML = '';
 
-  const setSoldBtn = document.createElement('button');
-      setSoldBtn.textContent = 'Set as sold';
-  setSoldBtn.className = 'secondary';
+      const setSoldBtn = document.createElement('button');
+      setSoldBtn.textContent = 'Oznacz jako sprzedane';
+      setSoldBtn.className = 'w-full px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors';
       setSoldBtn.addEventListener('click', async () => {
+        if (!confirm('Czy na pewno chcesz oznaczyć tę ofertę jako sprzedaną?')) return;
         const r = await apiFetch(`/api/offers/setAsSold.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
         if (r.ok) {
-          alert('Offer set as sold');
+          alert('Oferta została oznaczona jako sprzedana');
           loadOffer();
         } else {
-          alert(r.error || 'Failed to set as sold');
+          alert(r.error || 'Nie udało się oznaczyć oferty jako sprzedanej');
         }
       });
 
-  const removeBtn = document.createElement('button');
-      removeBtn.textContent = 'Remove offer';
-  removeBtn.className = 'danger';
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = 'Usuń ofertę';
+      removeBtn.className = 'w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors';
       removeBtn.addEventListener('click', async () => {
+        if (!confirm('Czy na pewno chcesz usunąć tę ofertę? Ta operacja jest nieodwracalna.')) return;
         const r = await apiFetch(`/api/offers/setAsRemoved.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
         if (r.ok) {
-          alert('Offer removed');
-          loadOffer();
+          alert('Oferta została usunięta');
+          window.location.href = '/offers.php';
         } else {
-          alert(r.error || 'Failed to remove offer');
+          alert(r.error || 'Nie udało się usunąć oferty');
         }
       });
 
