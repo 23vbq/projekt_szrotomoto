@@ -6,6 +6,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
+$search = isset($_GET['search']) ? trim($_GET['search']) : null;
+
 $qb = (new QueryBuilder(Database::getPdo()))
     ->select('
         o.id, o.created_at, o.updated_at, o.title, o.description, o.price, o.production_year, o.odometer, o.fuel_type, o.transmission, o.displacement, o.horsepower, o.body_type, o.doors_amount, o.seats_amount,
@@ -19,8 +21,21 @@ $qb = (new QueryBuilder(Database::getPdo()))
     ->innerJoin('brands', 'b', 'm.brand_id = b.id')
     ->innerJoin('users', 'u', 'o.created_by = u.id')
     ->where('o.status = :status')
-    ->addOrderBy('created_at', 'DESC')
     ->setParameter(':status', Consts::OFFER_STATUS_ACTIVE);
+
+if (!empty($search)) {
+    $qb->andWhere('(
+        o.title LIKE :search 
+        OR o.description LIKE :search 
+        OR b.name LIKE :search 
+        OR m.name LIKE :search 
+        OR o.vin LIKE :search 
+        OR o.registration_number LIKE :search
+    )')
+    ->setParameter(':search', '%' . $search . '%');
+}
+
+$qb->addOrderBy('created_at', 'DESC');
 
 $offers = $qb->execute()->fetchAll(PDO::FETCH_ASSOC);
 

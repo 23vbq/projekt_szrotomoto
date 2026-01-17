@@ -4,89 +4,119 @@ include __DIR__ . '/_partials/head.php';
 ?>
   <?php include __DIR__ . '/_partials/nav.php'; ?>
   <main class="max-w-3xl mx-auto my-8 px-4 sm:px-6 lg:px-8">
-    <div class="mb-6">
-      <h1 class="text-3xl font-bold text-slate-900 mb-2">Dodaj nową ofertę</h1>
-      <p class="text-gray-600">Wypełnij formularz, aby dodać swój pojazd</p>
+    <div id="authCheck" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+      <p class="text-gray-600">Sprawdzanie autoryzacji...</p>
     </div>
 
-    <form id="offerForm" enctype="multipart/form-data" class="bg-white border border-gray-200 p-6 sm:p-8 rounded-xl shadow-sm">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="md:col-span-2">
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Marka *</label>
-          <select id="brandSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">-- wybierz markę --</option>
-            <option value="" disabled id="brandsLoading">Ładowanie marek...</option>
-          </select>
-        </div>
-        
-        <div class="md:col-span-2">
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Model *</label>
-          <select id="modelSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
-            <option value="">-- wybierz najpierw markę --</option>
-          </select>
-        </div>
-        
-        <div class="md:col-span-2">
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Tytuł oferty *</label>
-          <input name="title" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="np. BMW 320d w doskonałym stanie">
-        </div>
-        
-        <div>
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Cena (PLN) *</label>
-          <input type="number" name="price" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="15000">
-        </div>
-        
-        <div>
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Rok produkcji *</label>
-          <input type="number" name="production_year" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="2015">
-        </div>
-        
-        <div>
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Przebieg (km) *</label>
-          <input type="number" name="odometer" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="120000">
-        </div>
-        
-        <div>
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Typ paliwa *</label>
-          <select name="fuel_type" id="fuelSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></select>
-        </div>
-        
-        <div>
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Skrzynia biegów *</label>
-          <select name="transmission" id="transmissionSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></select>
-        </div>
-        
-        <div>
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Typ nadwozia *</label>
-          <select name="body_type" id="bodySelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></select>
-        </div>
-        
-        <div class="md:col-span-2">
-          <label class="block mb-2 text-sm font-semibold text-slate-900">VIN *</label>
-          <input name="vin" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="WBADT43452G915989">
-        </div>
-        
-        <div class="md:col-span-2">
-          <label class="block mb-2 text-sm font-semibold text-slate-900">Zdjęcia</label>
-          <input type="file" name="files[]" multiple accept="image/*" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-          <p class="mt-2 text-sm text-gray-500">Możesz wybrać wiele plików. Maksymalny rozmiar: 10MB na plik</p>
-        </div>
+    <div id="offerFormContainer" class="hidden">
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold text-slate-900 mb-2">Dodaj nową ofertę</h1>
+        <p class="text-gray-600">Wypełnij formularz, aby dodać swój pojazd</p>
       </div>
 
-      <div class="mt-6 pt-6 border-t border-gray-200 flex gap-4">
-        <button type="submit" class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg">
-          Dodaj ofertę
-        </button>
-        <a href="/offers.php" class="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors no-underline flex items-center">
-          Anuluj
-        </a>
-      </div>
-    </form>
+      <form id="offerForm" enctype="multipart/form-data" class="bg-white border border-gray-200 p-6 sm:p-8 rounded-xl shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Marka *</label>
+            <select id="brandSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option value="">-- wybierz markę --</option>
+              <option value="" disabled id="brandsLoading">Ładowanie marek...</option>
+            </select>
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Model *</label>
+            <select id="modelSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
+              <option value="">-- wybierz najpierw markę --</option>
+            </select>
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Tytuł oferty *</label>
+            <input name="title" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="np. BMW 320d w doskonałym stanie">
+          </div>
+          
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Cena (PLN) *</label>
+            <input type="number" name="price" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="15000">
+          </div>
+          
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Rok produkcji *</label>
+            <input type="number" name="production_year" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="2015">
+          </div>
+          
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Przebieg (km) *</label>
+            <input type="number" name="odometer" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="120000">
+          </div>
+          
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Typ paliwa *</label>
+            <select name="fuel_type" id="fuelSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></select>
+          </div>
+          
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Skrzynia biegów *</label>
+            <select name="transmission" id="transmissionSelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></select>
+          </div>
+          
+          <div>
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Typ nadwozia *</label>
+            <select name="body_type" id="bodySelect" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></select>
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block mb-2 text-sm font-semibold text-slate-900">VIN *</label>
+            <input name="vin" required class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="WBADT43452G915989">
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block mb-2 text-sm font-semibold text-slate-900">Zdjęcia</label>
+            <input type="file" name="files[]" multiple accept="image/*" class="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <p class="mt-2 text-sm text-gray-500">Możesz wybrać wiele plików. Maksymalny rozmiar: 10MB na plik</p>
+          </div>
+        </div>
 
-    <div id="message" role="status" class="mt-4 p-4 rounded-lg hidden"></div>
+        <div class="mt-6 pt-6 border-t border-gray-200 flex gap-4">
+          <button type="submit" class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg">
+            Dodaj ofertę
+          </button>
+          <a href="/offers.php" class="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors no-underline flex items-center">
+            Anuluj
+          </a>
+        </div>
+      </form>
+
+      <div id="message" role="status" class="mt-4 p-4 rounded-lg hidden"></div>
+    </div>
   </main>
 
   <script>
+    // Check authentication before showing the form
+    (async function() {
+      try {
+        const res = await window.apiFetch('/api/login/me.php', { method: 'GET' });
+        
+        if (!res.ok || !res.data || !res.data.authenticated) {
+          // User is not authenticated, redirect to home
+          window.location.href = '/index.php';
+          return;
+        }
+        
+        // User is authenticated, show the form
+        document.getElementById('authCheck').classList.add('hidden');
+        document.getElementById('offerFormContainer').classList.remove('hidden');
+        
+        // Initialize form functionality
+        fetchValues();
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+        window.location.href = '/index.php';
+      }
+    })();
+
     async function fetchValues() {
       try {
         const [fuelRes, transRes, bodyRes, brandsRes] = await Promise.all([
@@ -258,8 +288,6 @@ include __DIR__ . '/_partials/head.php';
       msgEl.className = `mt-4 p-4 rounded-lg ${type === 'error' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-green-50 text-green-600 border border-green-200'}`;
       msgEl.classList.remove('hidden');
     }
-
-    fetchValues();
   </script>
 </body>
 </html>

@@ -9,8 +9,32 @@ include __DIR__ . '/_partials/head.php';
       <p class="text-gray-600">Znajdź swój wymarzony pojazd</p>
     </div>
     
+    <!-- Search Bar -->
+    <div class="mb-6">
+      <div class="relative">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Szukaj po tytule, opisie, marce, modelu, VIN lub numerze rejestracyjnym..." 
+          class="w-full px-4 py-3 pl-12 pr-12 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        >
+        <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <button 
+          id="clearSearch" 
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
+          title="Wyczyść wyszukiwanie"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
     <div class="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-      <a href="/offers_create.php" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg no-underline">
+      <a href="/offers_create.php" id="createOfferBtn" class="hidden inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg no-underline">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
         </svg>
@@ -73,10 +97,33 @@ include __DIR__ . '/_partials/head.php';
   </main>
 
   <script>
+    // Check authentication and show/hide create offer button
+    (async function() {
+      try {
+        const authRes = await window.apiFetch('/api/login/me.php', { method: 'GET' });
+        const createOfferBtn = document.getElementById('createOfferBtn');
+        
+        if (authRes.ok && authRes.data && authRes.data.authenticated) {
+          // User is authenticated, show create offer button
+          if (createOfferBtn) createOfferBtn.classList.remove('hidden');
+        } else {
+          // User is not authenticated, hide create offer button
+          if (createOfferBtn) createOfferBtn.classList.add('hidden');
+        }
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+        // On error, hide button
+        const createOfferBtn = document.getElementById('createOfferBtn');
+        if (createOfferBtn) createOfferBtn.classList.add('hidden');
+      }
+    })();
+
     // Client-side filtering and sorting for offers
     (function(){
       let offersCache = [];
+      let currentSearchTerm = '';
       const brandsMap = new Map(); // id -> name
+      let searchTimeout = null;
 
       function renderOffers(arr) {
         const list = document.getElementById('offersList');
@@ -98,7 +145,7 @@ include __DIR__ . '/_partials/head.php';
             const imgLink = document.createElement('a');
             imgLink.href = `/offer.php?offer_id=${encodeURIComponent(o.id)}`;
             const img = document.createElement('img');
-            img.src = `/api/attachments/show.php?id=${encodeURIComponent(o.attachment_id)}`;
+            img.src = window.getAttachmentUrl ? window.getAttachmentUrl(o.attachment_id) : `http://localhost:3000/api/attachments/show.php?id=${encodeURIComponent(o.attachment_id)}`;
             img.alt = o.title || 'Zdjęcie pojazdu';
             img.className = 'w-full h-full object-cover';
             imgLink.appendChild(img);
@@ -187,21 +234,32 @@ include __DIR__ . '/_partials/head.php';
         renderOffers(filtered);
       }
 
+      async function loadOffers(searchTerm = '') {
+        const searchUrl = searchTerm 
+          ? `/api/offers/search.php?search=${encodeURIComponent(searchTerm)}`
+          : '/api/offers/search.php';
+        
+        const offersRes = await apiFetch(searchUrl);
+        
+        if (!offersRes.ok) {
+          document.getElementById('offersList').innerHTML = `<li class="col-span-full bg-red-50 border border-red-200 p-4 rounded-xl text-center text-red-600">Błąd ładowania ofert: ${offersRes.error || ''}</li>`;
+          return [];
+        }
+        
+        return Array.isArray(offersRes.data) ? offersRes.data : [];
+      }
+
       async function loadInitial() {
         // Fetch offers and value lists in parallel
         const [offersRes, brandsRes, fuelRes, transRes, bodyRes] = await Promise.all([
-          apiFetch('/api/offers/search.php'),
+          loadOffers(),
           apiFetch('/api/vehicles/brands.php'),
           apiFetch('/api/values/fuelType.php'),
           apiFetch('/api/values/transmissionType.php'),
           apiFetch('/api/values/bodyType.php')
         ]);
 
-        if (!offersRes.ok) {
-          document.getElementById('offersList').innerHTML = `<li class="col-span-full bg-red-50 border border-red-200 p-4 rounded-xl text-center text-red-600">Błąd ładowania ofert: ${offersRes.error || ''}</li>`;
-          return;
-        }
-        offersCache = Array.isArray(offersRes.data) ? offersRes.data : [];
+        offersCache = offersRes;
 
         // Populate brands
         if (brandsRes.ok && Array.isArray(brandsRes.data)) {
@@ -285,10 +343,68 @@ include __DIR__ . '/_partials/head.php';
           document.getElementById('transmissionSelect').value = '';
           document.getElementById('bodySelect').value = '';
           document.getElementById('sortSelect').value = '';
+          
+          // Also clear search if active
+          if (currentSearchTerm) {
+            document.getElementById('searchInput').value = '';
+            currentSearchTerm = '';
+            document.getElementById('clearSearch').classList.add('hidden');
+          }
+          
           renderOffers(offersCache.slice());
         });
 
         document.getElementById('sortSelect').addEventListener('change', applyFiltersAndSort);
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        
+        searchInput.addEventListener('input', function() {
+          const searchTerm = this.value.trim();
+          currentSearchTerm = searchTerm;
+          
+          // Show/hide clear button
+          if (searchTerm) {
+            clearSearchBtn.classList.remove('hidden');
+          } else {
+            clearSearchBtn.classList.add('hidden');
+          }
+          
+          // Debounce search - wait 500ms after user stops typing
+          if (searchTimeout) {
+            clearTimeout(searchTimeout);
+          }
+          
+          searchTimeout = setTimeout(async () => {
+            // Show loading state
+            document.getElementById('offersList').innerHTML = '<li class="col-span-full bg-white border border-gray-200 p-8 rounded-xl text-center text-gray-500"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div><p>Wyszukiwanie...</p></li>';
+            
+            // Load offers with search
+            const offers = await loadOffers(searchTerm);
+            offersCache = offers;
+            
+            // Apply client-side filters and sort
+            applyFiltersAndSort();
+          }, 500);
+        });
+        
+        // Clear search
+        clearSearchBtn.addEventListener('click', async function() {
+          searchInput.value = '';
+          currentSearchTerm = '';
+          this.classList.add('hidden');
+          
+          // Show loading state
+          document.getElementById('offersList').innerHTML = '<li class="col-span-full bg-white border border-gray-200 p-8 rounded-xl text-center text-gray-500"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div><p>Ładowanie...</p></li>';
+          
+          // Reload all offers
+          const offers = await loadOffers();
+          offersCache = offers;
+          
+          // Apply client-side filters and sort
+          applyFiltersAndSort();
+        });
 
         // Initial render
         renderOffers(offersCache.slice());

@@ -79,7 +79,7 @@ include __DIR__ . '/_partials/head.php';
         if (Array.isArray(attachments) && attachments.length > 0) {
           attachments.forEach(id => {
             const img = document.createElement('img');
-            img.src = `/api/attachments/show.php?id=${encodeURIComponent(id)}`;
+            img.src = window.getAttachmentUrl(id);
             img.alt = o.title || 'Zdjęcie pojazdu';
             img.className = 'w-full h-64 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer';
             img.onclick = () => window.open(img.src, '_blank');

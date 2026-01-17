@@ -214,8 +214,20 @@ apiFetch.delete = function(path, opts = {}) {
   return apiFetch(path, { ...opts, method: 'DELETE' });
 };
 
+/**
+ * Get full URL for attachment/image
+ * @param {number|string} attachmentId - Attachment ID
+ * @returns {string} Full URL to attachment
+ */
+function getAttachmentUrl(attachmentId) {
+  // Attachments are served directly from backend API
+  // API_CONFIG.baseURL is 'http://localhost:3000/api', so we need to use it directly
+  return `${API_CONFIG.baseURL}/attachments/show.php?id=${encodeURIComponent(attachmentId)}`;
+}
+
 // Export for inline scripts
 window.apiFetch = apiFetch;
+window.getAttachmentUrl = getAttachmentUrl;
 
 // Also export for potential module usage
 if (typeof module !== 'undefined' && module.exports) {

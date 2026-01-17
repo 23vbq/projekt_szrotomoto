@@ -72,16 +72,45 @@ include __DIR__ . '/_partials/head.php';
     </div>
 
     <!-- CTA Section -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-12 text-center text-white">
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-12 text-center text-white" id="ctaSection">
       <h2 class="text-3xl font-bold mb-4">Masz pojazd do sprzedania?</h2>
       <p class="text-xl mb-8 text-blue-100">Dodaj swoją ofertę już dziś i dotrzyj do tysięcy potencjalnych kupujących!</p>
-      <a href="/offers_create.php" class="inline-block px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl no-underline">
+      <a href="/offers_create.php" id="ctaCreateOffer" class="hidden inline-block px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl no-underline">
         Dodaj ofertę za darmo
+      </a>
+      <a href="/login.php" id="ctaLogin" class="inline-block px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl no-underline">
+        Zaloguj się, aby dodać ofertę
       </a>
     </div>
   </main>
 
   <script>
+    // Check authentication and show/hide CTA buttons
+    (async function() {
+      try {
+        const authRes = await window.apiFetch('/api/login/me.php', { method: 'GET' });
+        const ctaCreateOffer = document.getElementById('ctaCreateOffer');
+        const ctaLogin = document.getElementById('ctaLogin');
+        
+        if (authRes.ok && authRes.data && authRes.data.authenticated) {
+          // User is authenticated, show create offer button
+          if (ctaCreateOffer) ctaCreateOffer.classList.remove('hidden');
+          if (ctaLogin) ctaLogin.classList.add('hidden');
+        } else {
+          // User is not authenticated, show login button
+          if (ctaCreateOffer) ctaCreateOffer.classList.add('hidden');
+          if (ctaLogin) ctaLogin.classList.remove('hidden');
+        }
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+        // On error, show login button
+        const ctaCreateOffer = document.getElementById('ctaCreateOffer');
+        const ctaLogin = document.getElementById('ctaLogin');
+        if (ctaCreateOffer) ctaCreateOffer.classList.add('hidden');
+        if (ctaLogin) ctaLogin.classList.remove('hidden');
+      }
+    })();
+
     // Load recent offers
     (async function() {
       try {
@@ -107,7 +136,7 @@ include __DIR__ . '/_partials/head.php';
               const imgLink = document.createElement('a');
               imgLink.href = `/offer.php?offer_id=${encodeURIComponent(o.id)}`;
               const img = document.createElement('img');
-              img.src = `/api/attachments/show.php?id=${encodeURIComponent(o.attachment_id)}`;
+              img.src = window.getAttachmentUrl(o.attachment_id);
               img.alt = o.title || 'Zdjęcie pojazdu';
               img.className = 'w-full h-full object-cover';
               imgLink.appendChild(img);
