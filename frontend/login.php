@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Login — Szrotomoto</title>
   <link rel="stylesheet" href="/public/assets/css/style.css">
+  <script src="/public/assets/js/api.js"></script>
 </head>
 <body>
   <?php include __DIR__ . '/_nav.php'; ?>
@@ -22,10 +23,9 @@
     <div id="message" role="status"></div>
 
     <p><a href="/public/register.php">Create an account</a></p>
-    <p><a href="/public/index.php">Back</a></p>
+  <p><a href="/public/offers.php">Back</a></p>
   </main>
 
-  <script src="/public/assets/js/api.js"></script>
   <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -35,8 +35,7 @@
 
       if (res.ok) {
         document.getElementById('message').textContent = res.data.user_name ? `Welcome, ${res.data.user_name}` : res.data.message;
-        // Redirect to vehicles page after a short pause
-        setTimeout(() => window.location.href = '/public/vehicles.php', 700);
+        setTimeout(() => window.location.href = '/public/offers.php', 700);
       } else {
         document.getElementById('message').textContent = res.error || 'Login failed';
       }

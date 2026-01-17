@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Create Offer — Szrotomoto</title>
   <link rel="stylesheet" href="/public/assets/css/style.css">
+  <script src="/public/assets/js/api.js"></script>
 </head>
 <body>
   <?php include __DIR__ . '/_nav.php'; ?>
@@ -44,7 +45,6 @@
     <p><a href="/public/offers.php">Back</a></p>
   </main>
 
-  <script src="/public/assets/js/api.js"></script>
   <script>
     async function fetchValues() {
       const [fuelRes, transRes, bodyRes, brandsRes] = await Promise.all([

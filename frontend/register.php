@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Register — Szrotomoto</title>
   <link rel="stylesheet" href="/public/assets/css/style.css">
+  <script src="/public/assets/js/api.js"></script>
 </head>
 <body>
   <?php include __DIR__ . '/_nav.php'; ?>
@@ -24,10 +25,9 @@
     <div id="message" role="status"></div>
 
     <p><a href="/public/login.php">Already have an account?</a></p>
-    <p><a href="/public/index.php">Back</a></p>
+  <p><a href="/public/offers.php">Back</a></p>
   </main>
 
-  <script src="/public/assets/js/api.js"></script>
   <script>
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();

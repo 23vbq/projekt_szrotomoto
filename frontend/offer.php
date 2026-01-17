@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Offer — Szrotomoto</title>
   <link rel="stylesheet" href="/public/assets/css/style.css">
+  <script src="/public/assets/js/api.js"></script>
 </head>
 <body>
   <?php include __DIR__ . '/_nav.php'; ?>
@@ -21,7 +22,6 @@
     <p><a href="/public/offers.php">Back to offers</a></p>
   </main>
 
-  <script src="/public/assets/js/api.js"></script>
   <script>
     function qs(name) {
       const params = new URLSearchParams(window.location.search);
@@ -92,8 +92,9 @@
       const actions = document.getElementById('actions');
       actions.innerHTML = '';
 
-      const setSoldBtn = document.createElement('button');
+  const setSoldBtn = document.createElement('button');
       setSoldBtn.textContent = 'Set as sold';
+  setSoldBtn.className = 'secondary';
       setSoldBtn.addEventListener('click', async () => {
         const r = await apiFetch(`/api/offers/setAsSold.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
         if (r.ok) {
@@ -104,8 +105,9 @@
         }
       });
 
-      const removeBtn = document.createElement('button');
+  const removeBtn = document.createElement('button');
       removeBtn.textContent = 'Remove offer';
+  removeBtn.className = 'danger';
       removeBtn.addEventListener('click', async () => {
         const r = await apiFetch(`/api/offers/setAsRemoved.php?offer_id=${encodeURIComponent(id)}`, { method: 'GET' });
         if (r.ok) {
