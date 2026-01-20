@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $currentUserId = Session::getUserId();
 
-// Handle file uploads if provided
 $attachmentIds = [];
 if (isset($_FILES['files']) && !empty($_FILES['files']['name'])) {
     $files = $_FILES['files'];
