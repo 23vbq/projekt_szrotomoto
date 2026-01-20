@@ -42,15 +42,13 @@ class Session{
 
     public static function start(){
         if(session_status() === PHP_SESSION_NONE){
-            // Configure session cookie to work with cross-origin requests
-            // Frontend runs on port 80, backend on port 3000
             session_set_cookie_params([
-                'lifetime' => 0, // Session cookie (expires when browser closes)
+                'lifetime' => 0,
                 'path' => '/',
-                'domain' => '', // Empty = current domain
-                'secure' => false, // Set to true in production with HTTPS
-                'httponly' => true, // Prevent JavaScript access for security
-                'samesite' => 'Lax' // Allow cross-origin requests but maintain CSRF protection
+                'domain' => '',
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Lax'
             ]);
             session_start();
         }
