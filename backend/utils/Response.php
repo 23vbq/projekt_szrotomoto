@@ -79,4 +79,37 @@ class Response {
     public static function error(string $message, int $statusCode = self::HTTP_BAD_REQUEST): void {
         self::json(['message' => $message], $statusCode);
     }
+
+    public static function setCorsHeaders(): void
+    {
+        $isConsole = php_sapi_name() === 'cli';
+        if ($isConsole) {
+            return;
+        }
+        
+        $requestOrigin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : null;
+        
+        $allowedOrigins = [
+            'http://localhost',
+            'http://localhost:80',
+            'http://127.0.0.1',
+            'http://127.0.0.1:80',
+        ];
+        
+        if ($requestOrigin && in_array($requestOrigin, $allowedOrigins)) {
+            header("Access-Control-Allow-Origin: $requestOrigin");
+        } else if (!$requestOrigin) {
+            header("Access-Control-Allow-Origin: http://localhost");
+        }
+        
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400');
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            http_response_code(200);
+            
+        }
+    }
 }
